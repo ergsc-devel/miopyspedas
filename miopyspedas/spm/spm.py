@@ -5,6 +5,8 @@ from pytplot import cdf_to_tplot
 
 from miopyspedas.config import CONFIG
 
+import logging
+
 def spm(
         trange=["2021-8-10","2021-8-11"],
         level="l2pre",
@@ -25,15 +27,15 @@ def spm(
 
     https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
     """
-
+    
     out_files = [] # list of local files downloaded
     tvars = [] # list of tplot variables created
 
 
     pathformat = (
         "satellite/mmo/cdf/spm/" + str(level) 
-        + "/cnt/%Y/%M/"
-        + "bc_mmo_spm_l2p_cnt_%Y%M%D_r??-v??-??.cdf"
+        + "/cnt/%Y/%m/"
+        + "bc_mmo_spm_l2p_cnt_%Y%m%d_r??-v??-??.cdf"
     )
 
     remote_names = dailynames(file_format=pathformat, trange=trange)
