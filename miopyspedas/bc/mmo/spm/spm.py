@@ -1,4 +1,4 @@
-from miopyspedas.load import load
+from miopyspedas.bc.mmo import load
 from pytplot import options
 
 import logging
@@ -75,12 +75,14 @@ def spm(
             (default: True)
 
         force_download=False,
+            **force_downloadの説明文を追記する
             (default: False)
         
         uname = str
         passwd = str
             We constrain the person for providing l2pre data.
             Please ask the CHS members to issue your username and password.
+            **uname, passwordを使っている理由を確認する
 
     Returns
     ----------

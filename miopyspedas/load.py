@@ -41,6 +41,11 @@ def load(trange=["2021-8-10","2021-8-11"],
 
     # elif instrument == "": # other instruments
     
+    """
+    load Other instruments will be described...
+    
+    """
+    
 
 # find the full remote path names using the trange
     remote_names = dailynames(file_format=pathformat, trange=trange)
