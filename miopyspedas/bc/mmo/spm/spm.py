@@ -1,4 +1,4 @@
-from miopyspedas.bc.mmo import load
+from ..load import load
 from pytplot import options
 
 import logging
@@ -109,12 +109,11 @@ def spm(
                     downloadonly=downloadonly,
                     notplot=notplot,
                     no_update=no_update,
-                    time_clip=time_clip, 
-                    no_update=no_update,
+                    time_clip=time_clip,
                     force_download=False,
                     uname=None, passwd=None
                     )
-
+    
     return spm_vars
 
 

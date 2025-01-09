@@ -1,3 +1,5 @@
+#/miopyspedas/miopyspedas/bc/mmo/load.py
+
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pytplot import time_clip as tclip
@@ -6,7 +8,9 @@ from pytplot import cdf_to_tplot
 from .config import CONFIG
 
 def load(trange=["2021-8-10","2021-8-11"], 
+        pathformat=None,
         instrument='spm',
+        datatype=None,
         level="l2pre",
         prefix="",
         suffix="",
@@ -18,8 +22,20 @@ def load(trange=["2021-8-10","2021-8-11"],
         no_update=False,
         time_clip=True,
         force_download=False,
-        uname=None, passwd=None,
+        uname=None, 
+        passwd=None,
+        mode=None,
+        site=None,
+        model=None,
+        file_res=None,
+        version=None,
         ):
+
+    """
+    This function is not meant to be called directly; please see the instrument specific wrappers:
+        pyspedas.projects.mmo.spm()
+    """
+
 
     """
     Load MMO data files for a given time range and instrument.
@@ -108,20 +124,17 @@ def load(trange=["2021-8-10","2021-8-11"],
 
     # elif instrument == "": # other instruments
     # Modules for other instruments will be added...
-    
-    
+
 
 # find the full remote path names using the trange
     remote_names = dailynames(file_format=pathformat, trange=trange)
-
     out_files = []
-
 
     files = download(
             remote_file=remote_names,
             remote_path=CONFIG["remote_data_dir"],
             local_path=CONFIG['local_data_dir'],
-            no_download=no_update,
+            no_update=no_update,
             force_download=force_download,
             username=uname, password=passwd,
         )
@@ -134,6 +147,7 @@ def load(trange=["2021-8-10","2021-8-11"],
 
     if downloadonly:
         return out_files
+
 
     tvars = cdf_to_tplot(
         out_files,
