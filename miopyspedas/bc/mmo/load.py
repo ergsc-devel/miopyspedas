@@ -134,7 +134,7 @@ def load(trange=["2021-8-10","2021-8-11"],
             remote_file=remote_names,
             remote_path=CONFIG["remote_data_dir"],
             local_path=CONFIG['local_data_dir'],
-            no_update=no_update,
+            no_download=no_update,
             force_download=force_download,
             username=uname, password=passwd,
         )
