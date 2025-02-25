@@ -35,8 +35,8 @@ To get virtual environments working with Jupyter, in the virtual environment, ty
 pip install ipykernel
 python -m ipykernel install --user --name miopyspedas --display-name "(miopySPEDAS plug-in)"
 ```
-
-(note: "miopyspedas" is the name of your virtual environment)
+> [!NOTE]
+>"miopyspedas" is the name of your virtual environment
 
 Then once you open the notebook, go to "Kernel" then "Change kernel" and select the one named "(miopySPEDAS plug-in)"
 
@@ -50,5 +50,48 @@ pip install pyspedas
 
 
 ## Examples
+An example code for Jupyter notebooks 
+
+```python
+from miopyspedas_refac_spm import miopyspedas
+from pytplot import tplot, store_data, options
+```
+
+Choose timespan by range
+
+```python
+spm_vars = miopyspedas.spm(trange=["2020-4-10 00:00","2020-4-10 08:00"],level="l2pre")
+```
+> [!NOTE]
+> If you want to use not public data, fill uname and passed.
+
+Print tplot valuables and sample plot
+```python
+for i in range(len(spm_vars)):
+    print(spm_vars[i])
+tplot(spm_vars[0])
+```
+
+Similar plot to Fig.5(b) in Kinoshita et al., 2025
+
+```python
+store_data("overplot", data = spm_vars)
+options("overplot", 'ylog', 1)
+options("overplot", 'legend_names', spm_vars)
+options("overplot", 'Color', ['C0', 'C1', 'C2', 'C3', 'C0', 'C1', 'C2', 'C3'])
+ls = ['solid_line', 'dash']
+options("overplot", 'linestyle', [ls[0], ls[0], ls[0], ls[0], ls[1], ls[1], ls[1], ls[1]])
+options("overplot", 'thick', 1.5)
+options("overplot", 'ytitle', 'SPM cnt')
+tplot("overplot")
+```
+
+> [!NOTE]
+> unit is different from paper
+
+
+
+
+
 
 
