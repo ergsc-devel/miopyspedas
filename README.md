@@ -51,8 +51,6 @@ After installing pyspedas, you need to add miopyspedas plug-in to your virtual e
 ```bash
 pip install git+https://github.com/ergsc-devel/miopyspedas.git
 ```
-> [!NOTE]
->"python3.**" is the version of Python in your virtual environment. Please fill the number depending on your environment
 
 
 ## Examples
