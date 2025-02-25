@@ -47,11 +47,10 @@ pip install pyspedas
 ```
 
 ### Install miopyspedas plug-in
-After installing pyspedas, you need to add miopyspedas plug-in to your virtual environment manually.
+After installing pyspedas, you need to add miopyspedas plug-in to your virtual environment.
 
-Download Zip of miopyspedas from github, then move plug-in files to your virtual environment.
 ```bash
-mv miopyspedas ~/miopyspedas_test/lib/python3.**/site-packages/
+pip install git+https://github.com/ergsc-devel/miopyspedas.git
 ```
 > [!NOTE]
 >"python3.**" is the version of Python in your virtual environment. Please fill the number depending on your environment
