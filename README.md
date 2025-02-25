@@ -58,7 +58,7 @@ An example code for Jupyter notebooks
 
 ```python
 from miopyspedas import miopyspedas
-from pytplot import tplot, store_data, options
+from pytplot import tplot, store_data, options, get_data
 ```
 
 Choose timespan by range
@@ -74,6 +74,11 @@ Print tplot valuables and sample plot
 for i in range(len(spm_vars)):
     print(spm_vars[i])
 tplot(spm_vars[0])
+```
+
+Extract the data from tplot variables as xarray format.
+```python
+time, spm_data = get_data('spm_vars')
 ```
 
 Similar plot to Fig.5(b) in Kinoshita et al., 2025
