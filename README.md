@@ -33,10 +33,10 @@ To get virtual environments working with Jupyter, in the virtual environment, ty
 
 ```bash
 pip install ipykernel
-python -m ipykernel install --user --name miopyspedas --display-name "(miopySPEDAS plug-in)"
+python -m ipykernel install --user --name miopyspedas_test --display-name "(miopySPEDAS plug-in)"
 ```
 > [!NOTE]
->"miopyspedas" is the name of your virtual environment
+>"miopyspedas_test" is the name of your virtual environment
 
 Then once you open the notebook, go to "Kernel" then "Change kernel" and select the one named "(miopySPEDAS plug-in)"
 
@@ -47,6 +47,14 @@ pip install pyspedas
 ```
 
 ### Install miopyspedas plug-in
+After installing pyspedas, you need to add miopyspedas plug-in to your virtual environment manually.
+
+Download Zip of miopyspedas from github, then move plug-in files to your virtual environment.
+```bash
+mv miopyspedas ~/miopyspedas_test/lib/python3.**/site-packages/
+```
+> [!NOTE]
+>"python3.**" is the version of Python in your virtual environment. Please fill the number depending on your environment
 
 
 ## Examples
