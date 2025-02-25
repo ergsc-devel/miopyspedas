@@ -1,5 +1,4 @@
-# The development of the Mio-SC plug-ins for PySPEDAS
-> refac_spm: SPM moduleの整理整頓用branch
+# User's guide of Mio-SC plug-ins for PySPEDAS
 
 The routines in this module can be used to load data from the BepiColombo/Mercury Magnetospheric Orbiter (MMO).
 
@@ -60,7 +59,7 @@ pip install git+https://github.com/ergsc-devel/miopyspedas.git
 An example code for Jupyter notebooks 
 
 ```python
-from miopyspedas_refac_spm import miopyspedas
+from miopyspedas import miopyspedas
 from pytplot import tplot, store_data, options
 ```
 
