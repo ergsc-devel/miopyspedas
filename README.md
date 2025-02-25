@@ -71,7 +71,7 @@ Choose timespan by range
 spm_vars = miopyspedas.spm(trange=["2020-4-10 00:00","2020-4-10 08:00"],level="l2pre")
 ```
 > [!NOTE]
-> If you want to use not public data, fill uname and passed.
+> If you want to use not public data, fill uname and passwd.
 
 Print tplot valuables and sample plot
 ```python
