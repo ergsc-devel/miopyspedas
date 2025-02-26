@@ -84,7 +84,7 @@ print(pyspedas.time_string(time))
 print(data)
 ```
 
-Similar plot to Fig.5(b) in Kinoshita et al., 2025
+Similar plot to Fig.5(b) in Kinoshita et al. (2025)
 
 ```python
 store_data("overplot", data = spm_vars)
@@ -99,7 +99,8 @@ tplot("overplot")
 ```
 
 > [!NOTE]
-> unit is different from paper
+> unit is different from Kinoshita et al. (2025)
+
 
 
 
