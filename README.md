@@ -57,7 +57,7 @@ pip install git+https://github.com/ergsc-devel/miopyspedas.git
 An example code for Jupyter notebooks 
 
 ```python
-from miopyspedas import miopyspedas
+import miopyspedas
 from pytplot import tplot, store_data, options, get_data
 import pyspedas
 ```
