@@ -19,7 +19,7 @@ To enter your virtual environment, run the 'activate' script:
 
 **Windows**
 ```bash
-~\miopyspedas_test\Scripts\activate
+.\miopyspedas_test\Scripts\activate
 ```
 
 **macOS and Linux**
