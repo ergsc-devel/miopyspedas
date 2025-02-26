@@ -62,7 +62,7 @@ from pytplot import tplot, store_data, options, get_data
 import pyspedas
 ```
 
-Choose timespan by range
+Choose timespan by trange
 
 ```python
 spm_vars = miopyspedas.spm(trange=["2020-4-10 00:00","2020-4-10 08:00"],level="l2pre")
