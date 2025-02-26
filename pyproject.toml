@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name='miopyspedas'
+version='0.0'
+packages=find_packages(exclude=['contrib', 'docs', 'tests*'])
+install_requires=['pyspedas>=1.2.8']
+python_requires='>=3.8'
+include_package_data=True
+
+[tool.setuptools]
+packages = {find = {exclude = ["contrib", "docs", "tests*"]}}
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*"=["*.md","LICENSE.txt"]
