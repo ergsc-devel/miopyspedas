@@ -39,9 +39,9 @@ def load(trange=["2021-8-10","2021-8-11"],
 
     """
     Load MMO data files for a given time range and instrument.
-    **このコメント文はまだMAVENのload moduleからコピペしただけのため要編集
     
-    Parameters
+    
+    Parameters (Draft)
     ------------
         trange: list or str  
             time range of interest [starttime, endtime] with the format 
@@ -102,7 +102,7 @@ def load(trange=["2021-8-10","2021-8-11"],
         passwd = str
             We constrain the person for providing l2pre data.
             Please ask the CHS members to issue your username and password.
-            **uname, passwordを使っている理由を確認する
+            
 
     Returns
     ----------
