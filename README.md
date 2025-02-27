@@ -79,12 +79,12 @@ tplot(spm_vars[0])
 
 Extract the data from tplot variables as xarray format.
 ```python
-time, spm_data = get_data('spm_vars')
+time, data = get_data('mmo_spm_l2p_spm1_lv3_cnt')
 print(pyspedas.time_string(time))
-print(spm_data)
+print(data)
 ```
 
-Similar plot to Fig.5(b) in Kinoshita et al., 2025
+Similar plot to Fig.5(b) in Kinoshita et al. (2025)
 
 ```python
 store_data("overplot", data = spm_vars)
@@ -99,7 +99,8 @@ tplot("overplot")
 ```
 
 > [!NOTE]
-> unit is different from paper
+> unit is different from Kinoshita et al. (2025)
+
 
 
 
