@@ -2,14 +2,15 @@
 
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
-from pytplot import time_clip as tclip
-from pytplot import cdf_to_tplot
+from pyspedas import time_clip as tclip
+from pyspedas import cdf_to_tplot
 
 from .config import CONFIG
 
 def load(trange=["2021-8-10","2021-8-11"], 
         pathformat=None,
         instrument='spm',
+        datarate='l',
         datatype=None,
         level="l2pre",
         prefix="",
@@ -24,6 +25,7 @@ def load(trange=["2021-8-10","2021-8-11"],
         force_download=False,
         uname=None, 
         passwd=None,
+        files=None,
         mode=None,
         site=None,
         model=None,
@@ -130,7 +132,8 @@ def load(trange=["2021-8-10","2021-8-11"],
     remote_names = dailynames(file_format=pathformat, trange=trange)
     out_files = []
 
-    files = download(
+    if files is None:
+        files = download(
             remote_file=remote_names,
             remote_path=CONFIG["remote_data_dir"],
             local_path=CONFIG['local_data_dir'],
@@ -138,10 +141,15 @@ def load(trange=["2021-8-10","2021-8-11"],
             force_download=force_download,
             username=uname, password=passwd,
         )
+    elif isinstance(files, str):
+        files = [files]
 
     if files is not None:
         for file in files:
             out_files.append(file)
+    else:
+        # if no files were found or given, return None
+        return None
 
     out_files = sorted(out_files)
 
