@@ -6,8 +6,9 @@ import logging
 def mia(
         trange=["2021-10-1","2021-10-2"],
         level="l2pre",
-        datarate="l",
+        data_mode="l",
         datatype="et-all",
+        obs_mode=None,
         prefix="",
         suffix="",
         get_support_data=False,
@@ -35,11 +36,14 @@ def mia(
         level: str
             Data level (default: l2pre)
         
-        datarate: str
-            Data rate, 'l' for the low data rate (L-mode; default), 'm' for M-mode
+        data_mode: str
+            Data rate mode, 'l' for the low data rate mode (L-mode; default), 'm' for M-mode
         
         datatype: str
             Data type, 'et-all' for E-t all data (default), 'et-swall' for E-t swall data
+        
+        obs_mode: str
+            Observation mode (Currently not used; may be used in future updates)
 
         prefix: str
             The tplot variable names will be given this prefix.
@@ -107,10 +111,10 @@ def mia(
     if suffix is None:
         suffix = ""
         
-    spm_vars = load(trange=trange,
+    tvars = load(trange=trange,
                     instrument='mia', 
                     level=level,
-                    datarate=datarate,
+                    data_mode=data_mode,
                     datatype=datatype,
                     prefix=prefix, 
                     suffix=suffix,
@@ -126,7 +130,7 @@ def mia(
                     files=files
                     )
     
-    return spm_vars
+    return tvars
 
 
 
