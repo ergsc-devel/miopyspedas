@@ -129,49 +129,41 @@ def load(trange=["2021-8-10","2021-8-11"],
 
 
 # find the full remote path names using the trange
-    remote_names = dailynames(file_format=pathformat, trange=trange)
+    remote_names = dailynames(file_format=pathformat,
+                              trange=trange, res=file_res)
+
     out_files = []
-
-    if files is None:
-        files = download(
-            remote_file=remote_names,
-            remote_path=CONFIG["remote_data_dir"],
-            local_path=CONFIG['local_data_dir'],
-            no_download=no_update,
-            force_download=force_download,
-            username=uname, password=passwd,
-        )
-    elif isinstance(files, str):
-        files = [files]
-
+    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
+                     'local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
     if files is not None:
         for file in files:
             out_files.append(file)
-    else:
-        # if no files were found or given, return None
-        return None
 
     out_files = sorted(out_files)
 
     if downloadonly:
         return out_files
 
+    tvars = cdf_to_tplot(out_files, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
+                         varformat=varformat, varnames=varnames, notplot=notplot)
 
-    tvars = cdf_to_tplot(
-        out_files,
-        prefix=prefix,
-        suffix=suffix,
-        get_support_data=get_support_data,
-        varformat=varformat,
-        varnames=varnames,
-        notplot=notplot,
-    )
-
-    if tvars is None or notplot:
+    if notplot:
+        if len(out_files) > 0:
+            cdf_file = cdflib.CDF(out_files[-1])
+            cdf_info = cdf_file.cdf_info()
+            all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
+            gatt = cdf_file.globalattsget()
+            for var in all_cdf_variables:
+                t_plot_name = prefix + var + suffix
+                if t_plot_name in tvars:
+                    vatt = cdf_file.varattsget(var)
+                    tvars[t_plot_name]['CDF'] = {'VATT':vatt,
+                                                'GATT':gatt,
+                                                'FILENAME':out_files}
         return tvars
 
     if time_clip:
         for new_var in tvars:
-            tclip(new_var, trange[0], trange[1], suffix="")
+            tclip(new_var, trange[0], trange[1], suffix='')
 
     return tvars
