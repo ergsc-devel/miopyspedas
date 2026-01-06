@@ -31,7 +31,7 @@ def mia(
             time range of interest [starttime, endtime] with the format 
             'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
-            (default: ["2021-8-10","2021-8-11"])
+            (default: ["2021-10-1","2021-10-2"])
         
         level: str
             Data level (default: l2pre)
@@ -95,7 +95,10 @@ def mia(
         passwd = str
             We constrain the person for providing l2pre data.
             Please ask the CHS members to issue your username and password.
-            **uname, passwordを使っている理由を確認する
+        
+        files: list of str
+            Set data file paths explicitly to load data from local files.
+            (default: None)
 
     Returns
     ----------
@@ -106,13 +109,23 @@ def mia(
     """
 
     if prefix is None:
-        prefix = ""
+        prefix = "mmo_mia_"+level+"_"+data_mode+"_"+datatype+"_"
     
     if suffix is None:
         suffix = ""
-        
+    
+    if level == "l2pre":
+        lev = "l2p"
+    else:
+        lev = level
+    
+    if files is None:
+        pathformat = f"satellite/mmo/cdf/mppe/mia/{level}/{datatype}/%Y/%m/" + \
+            f"bc_mmo_mppe-mia__{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf"
+    
     tvars = load(trange=trange,
                     instrument='mia', 
+                    pathformat=pathformat,
                     level=level,
                     data_mode=data_mode,
                     datatype=datatype,
@@ -129,7 +142,11 @@ def mia(
                     uname=None, passwd=None,
                     files=files
                     )
+    if downloadonly is True:    
+        return None
     
+
+
     return tvars
 
 
