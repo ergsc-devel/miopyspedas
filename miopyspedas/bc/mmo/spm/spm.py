@@ -93,13 +93,23 @@ def spm(
     """
 
     if prefix is None:
-        prefix = ""
+        prefix = f"mmo_spm_l2p_"
     
     if suffix is None:
         suffix = ""
-        
+    # https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
+    # for spm: level=l2pre, datatype=
+    pathformat = (
+        "satellite/mmo/cdf/spm/" + str(level) 
+        + "/cnt/%Y/%m/"
+        + "bc_mmo_spm_l2p_cnt_%Y%m%d_r??-v??-??.cdf"
+        )
+
+    prefix = 'mmo_spm_l2p_'
+
     spm_vars = load(trange=trange,
                     instrument='spm', 
+                    pathformat=pathformat,
                     level=level,
                     prefix=prefix, 
                     suffix=suffix,
