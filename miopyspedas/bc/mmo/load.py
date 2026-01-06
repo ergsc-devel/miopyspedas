@@ -29,7 +29,7 @@ def load(trange=["2021-8-10","2021-8-11"],
         mode=None,
         site=None,
         model=None,
-        file_res=None,
+        file_res=24*3600.,
         version=None,
         ):
 
