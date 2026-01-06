@@ -10,7 +10,7 @@ from .config import CONFIG
 def load(trange=["2021-8-10","2021-8-11"], 
         pathformat=None,
         instrument='spm',
-        datarate='l',
+        data_mode='l',
         datatype=None,
         level="l2pre",
         prefix="",
@@ -112,28 +112,18 @@ def load(trange=["2021-8-10","2021-8-11"],
         List of loaded data variables or files downloaded.
     """
 
-    if instrument == "spm":
-        # https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
-        # for spm: level=l2pre, datatype=
-        pathformat = (
-            "satellite/mmo/cdf/spm/" + str(level) 
-            + "/cnt/%Y/%m/"
-            + "bc_mmo_spm_l2p_cnt_%Y%m%d_r??-v??-??.cdf"
-        )
-
-        remote_names = dailynames(file_format=pathformat, trange=trange)
-        prefix = 'mmo_spm_l2p_'
-
     # elif instrument == "": # other instruments
     # Modules for other instruments will be added...
 
 
-# find the full remote path names using the trange
+    # find the full remote path names using the trange
     remote_names = dailynames(file_format=pathformat,
                               trange=trange, res=file_res)
-
+    
     out_files = []
-    files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
+    # Download data files and set their paths unless local file paths are explicitly given
+    if files is None:
+        files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
                      'local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
     if files is not None:
         for file in files:
