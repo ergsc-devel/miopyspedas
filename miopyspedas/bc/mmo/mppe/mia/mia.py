@@ -121,7 +121,7 @@ def mia(
     
     if files is None:
         pathformat = f"satellite/mmo/cdf/mppe/mia/{level}/{datatype}/%Y/%m/" + \
-            f"bc_mmo_mppe-mia__{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf"
+            f"bc_mmo_mppe-mia_{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf"
     
     tvars = load(trange=trange,
                     instrument='mia', 
