@@ -108,9 +108,6 @@ def mia(
     https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/mppe/mia/l2pre/et-all/2021/10/bc_mmo_mppe-mia_l2p_l-et-all_20211001_r01-v00-00.cdf
     """
 
-    if prefix is None:
-        prefix = "mmo_mia_"+level+"_"+data_mode+"_"+datatype+"_"
-    
     if suffix is None:
         suffix = ""
     
@@ -118,6 +115,10 @@ def mia(
         lev = "l2p"
     else:
         lev = level
+    
+    if prefix == "":
+        prefix = "mmo_mia_"+lev+"_"+data_mode+"_"+datatype+"_"
+    
     
     if files is None:
         pathformat = f"satellite/mmo/cdf/mppe/mia/{level}/{datatype}/%Y/%m/" + \
@@ -144,6 +145,35 @@ def mia(
                     )
     if downloadonly is True:    
         return None
+    
+    # Decorate tplot variables
+    if level == "l2pre":
+        if data_mode == "l":
+            match datatype:
+                case "et-all" | "et-swall":
+                    options( prefix+"count_d?", "spec", 1)
+                    options( prefix+"count_d?", "yrange", [1e1, 2.6e4])
+                    options( prefix+"count_d?", "ylog", 1)
+                    options( prefix+"count_d?", "ysubtitle", "[eV]")
+                    options( prefix+"count_d?", "zlog", 1)
+                    options( prefix+"count_d?", "zrange", [1e0, 1e4])
+                    options( prefix+"count_d?", "ztitle", "[cnt/smpl]")
+                    for i in range(1,5):
+                        options( prefix+f"count_d{i}", "ytitle", f"BC/MMO\nMIA L2p\ncount d{i}")
+                    
+                    options( prefix+"deflux_d?", "spec", 1)
+                    options( prefix+"deflux_d?", "yrange", [1e1, 2.6e4])
+                    options( prefix+"deflux_d?", "ylog", 1)
+                    options( prefix+"deflux_d?", "ysubtitle", "[eV]")
+                    options( prefix+"deflux_d?", "zlog", 1)
+                    options( prefix+"deflux_d?", "zrange", [1e5, 1e9])
+                    options( prefix+"deflux_d?", "ztitle", "[eV/cm^2/s/sr/eV]")
+                    for i in range(1,5):
+                        options( prefix+f"deflux_d{i}", "ytitle", f"BC/MMO\nMIA L2p\nEneFlux d{i}")
+            
+        elif data_mode == "m":
+            # Currently, only L-mode data is available
+            print("M-mode data is currently not available.")
     
 
 
