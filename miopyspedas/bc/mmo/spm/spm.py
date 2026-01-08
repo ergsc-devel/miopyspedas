@@ -92,10 +92,10 @@ def spm(
     https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
     """
 
-    if prefix is None:
+    if prefix == "":
         prefix = f"mmo_spm_l2p_"
     
-    if suffix is None:
+    if suffix == "":
         suffix = ""
     # https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
     # for spm: level=l2pre, datatype=
