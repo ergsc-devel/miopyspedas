@@ -143,32 +143,32 @@ def ofa(
         return loaded_data
 
     # set spectrogram plot option
-    options(prefix+'spec_E*'+suffix,  'Spec', 1)
-    options(prefix+'spec_B*'+suffix,  'Spec', 1)
+    options(prefix+'spec_e*'+suffix,  'Spec', 1)
+    options(prefix+'spec_b*'+suffix,  'Spec', 1)
 
     # set y axis to logscale
-    options(prefix+'spec_E*'+suffix,  'ylog', 1)
-    options(prefix+'spec_B*'+suffix,  'ylog', 1)
+    options(prefix+'spec_e*'+suffix,  'ylog', 1)
+    options(prefix+'spec_b*'+suffix,  'ylog', 1)
 
     #  Merge spectrogram
     match data_mode:
         case 'l':
-            store_data(prefix+'E_spectra_merged', data=tnames(prefix+'spec_E_*'))
-            store_data(prefix+'B_spectra_merged', data=tnames(prefix+'spec_B_*'))  
-            options(prefix+'E_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (E)')
-            options(prefix+'B_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (B)')
+            store_data(prefix+'e_spectra_merged', data=tnames(prefix+'spec_e_*'))
+            store_data(prefix+'b_spectra_merged', data=tnames(prefix+'spec_b_*'))  
+            options(prefix+'e_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (E)')
+            options(prefix+'b_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (B)')
         case 'm':
-            store_data(prefix+'Ex_spectra_merged', data=tnames(prefix+'spec_Ex_*'))
-            store_data(prefix+'Ey_spectra_merged', data=tnames(prefix+'spec_Ey_*'))
+            store_data(prefix+'ex_spectra_merged', data=tnames(prefix+'spec_ex_*'))
+            store_data(prefix+'ey_spectra_merged', data=tnames(prefix+'spec_ey_*'))
 
-            store_data(prefix+'By_spectra_merged', data=tnames(prefix+'spec_By_*'))
-            store_data(prefix+'Bz_spectra_merged', data=tnames(prefix+'spec_Bz_*'))
+            store_data(prefix+'by_spectra_merged', data=tnames(prefix+'spec_by_*'))
+            store_data(prefix+'bz_spectra_merged', data=tnames(prefix+'spec_bz_*'))
 
-            options(prefix+'Ex_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ex)')
-            options(prefix+'Ey_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ey)')
+            options(prefix+'ex_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ex)')
+            options(prefix+'ey_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ey)')
 
-            options(prefix+'By_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (By)')
-            options(prefix+'Bz_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Bz)')
+            options(prefix+'by_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (By)')
+            options(prefix+'bz_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Bz)')
 
 
     # set ysubtitle
@@ -181,15 +181,15 @@ def ofa(
     options(tnames(prefix+'*_spectra_*'+suffix),  'ylog', 1)
     
     # set ztitle
-    options(tnames(prefix+'E*_spectra_*'+suffix),  'ztitle', 'dBmVpp')
-    options(tnames(prefix+'B*_spectra_*'+suffix),  'ztitle', 'pT^2/Hz')
+    options(tnames(prefix+'e*_spectra_*'+suffix),  'ztitle', 'dBmVpp')
+    options(tnames(prefix+'b*_spectra_*'+suffix),  'ztitle', 'pT^2/Hz')
 
     # set z axis to logscale
-    options(tnames(prefix+'E*_spectra_*'+suffix),  'zlog', 1)
-    options(tnames(prefix+'E*_spectra_*'+suffix),  'zlog', 1)
+    options(tnames(prefix+'e*_spectra_*'+suffix),  'zlog', 1)
+    options(tnames(prefix+'e*_spectra_*'+suffix),  'zlog', 1)
 
     # change colormap option
-    options(tnames(prefix+'E*_spectra_*'+suffix),  'Colormap', 'jet')
-    options(tnames(prefix+'E*_spectra_*'+suffix),  'Colormap', 'jet')
+    options(tnames(prefix+'e*_spectra_*'+suffix),  'Colormap', 'jet')
+    options(tnames(prefix+'e*_spectra_*'+suffix),  'Colormap', 'jet')
 
     return loaded_data
