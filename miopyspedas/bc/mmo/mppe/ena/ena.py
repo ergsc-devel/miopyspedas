@@ -222,7 +222,7 @@ def ena(
                     options( prefix+"corrected_flux", "ztitle", "[/s/cm^2/eV/sr]")
                     options( prefix+"corrected_flux", "spec", 1)
                 case _:
-
+                    print("Invalid observation mode")
         elif data_mode == "m":
             # Only L-mode data is available
             print("M-mode data is not available.")
