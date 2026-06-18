@@ -3,7 +3,7 @@ from pyspedas import options
 
 import logging
 
-def mia(
+def ena(
         trange=["2020-04-09","2020-04-10"],
         level="l2pre",
         data_mode="l",
