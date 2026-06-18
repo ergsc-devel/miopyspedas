@@ -154,7 +154,7 @@ def ena(
 
         if data_mode == "l":
 
-            match obs_mode:
+            match datatype:
                 case "mass":
                     # coincident count
                     options( prefix+"c_cnt_tot", "yrange", [20.0, 2560.0])
@@ -223,6 +223,7 @@ def ena(
                     options( prefix+"corrected_flux", "spec", 1)
                 case _:
                     print("Invalid observation mode")
+
         elif data_mode == "m":
             # Only L-mode data is available
             print("M-mode data is not available.")
