@@ -12,4 +12,5 @@ from .bc.mmo.load import load
 from .bc.mmo.spm.spm import spm
 
 from .bc.mmo.mppe.mia.mia import mia
+from .bc.mmo.mppe.ena.ena import ena
 from .bc.mmo.pwi.ofa import ofa
