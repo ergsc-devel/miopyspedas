@@ -124,7 +124,7 @@ def ena(
     
     
     if files is None:
-        pathformat = f"satellite/mmo/cdf/mppe/ena/{level}/{data_mode}/{datatypeobs_mode}/{}/%Y/%m/" + \
+        pathformat = f"satellite/mmo/cdf/mppe/ena/{level}/{data_mode}/{datatype}/{obs_mode}/%Y/%m/" + \
             f"bc_mmo_mppe-ena_{lev}_{data_mode}-{obs_mode}_%Y%m%d_r??-v??-??.cdf"
     
     tvars = load(trange=trange,
