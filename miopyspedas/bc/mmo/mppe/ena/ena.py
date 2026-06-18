@@ -31,13 +31,13 @@ def mia(
             time range of interest [starttime, endtime] with the format 
             'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
-            (default: ["2021-10-1","2021-10-2"])
+            (default: ["2020-04-09","2020-04-10"])
         
         level: str
             Data level (default: l2pre)
         
         data_mode: str
-            Data rate mode, 'l' for the low data rate mode (L-mode; default), 'm' for the M-mode
+            Data rate mode, 'l' for the low data rate mode (L-mode; default)
         
         datatype: str
             Data type; 'mass' for the mass accumulation mode data (default), 'cnt' for the count accumulation mode data
