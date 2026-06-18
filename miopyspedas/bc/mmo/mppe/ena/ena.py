@@ -128,7 +128,7 @@ def ena(
             f"bc_mmo_mppe-ena_{lev}_{data_mode}-{obs_mode}_%Y%m%d_r??-v??-??.cdf"
     
     tvars = load(trange=trange,
-                    instrument='mia', 
+                    instrument='ena', 
                     pathformat=pathformat,
                     level=level,
                     data_mode=data_mode,
