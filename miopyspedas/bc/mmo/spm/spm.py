@@ -21,16 +21,16 @@ def spm(
     """
     This function loads data from the Solar Particle Monitor (SPM)
     
-    Parameters
+    Parameters (Draft)
     ------------
         trange: list or str  
             time range of interest [starttime, endtime] with the format 
-            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            ['YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
             (default: ["2021-8-10","2021-8-11"])
         
         level: str
-            Data level (default: l2pre)
+            Data level (default: l2pre) --> after MOI default will be l2
         
         prefix: str
             The tplot variable names will be given this prefix.
@@ -38,7 +38,7 @@ def spm(
 
         suffix: str
             The tplot variable names will be given this suffix.
-            By default, no prefix is added.
+            By default, no suffix is added.
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
@@ -63,7 +63,7 @@ def spm(
             (default: False)
         
         notplot: bool
-            Return the data in hash tables instead of creating tplot variables.
+            Return the data in dict instead of creating tplot variables.
             (default: False)
         
         no_update: bool
@@ -74,15 +74,15 @@ def spm(
             Time clip the variables to exactly the range specified in the trange keyword.
             (default: True)
 
-        force_download=False,
-            **force_downloadの説明文を追記する
+        force_download: bool,
+            Download file even if local version is more recent than server version.
             (default: False)
         
-        uname = str
-        passwd = str
-            We constrain the person for providing l2pre data.
-            Please ask the CHS members to issue your username and password.
-            **uname, passwordを使っている理由を確認する
+        uname: str
+        passwd: str
+            Password for accessing restricted data products.
+            Please contact the PI teams (or the project team) to obtain authentication credentials.
+            Access to l2pre data is restricted and generally limited to project members.
 
     Returns
     ----------

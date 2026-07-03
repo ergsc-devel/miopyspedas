@@ -54,7 +54,7 @@ def ena(
 
         suffix: str
             The tplot variable names will be given this suffix.
-            By default, no prefix is added.
+            By default, no suffix is added.
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
@@ -79,7 +79,7 @@ def ena(
             (default: False)
         
         notplot: bool
-            Return the data in hash tables instead of creating tplot variables.
+            Return the data in dict instead of creating tplot variables.
             (default: False)
         
         no_update: bool
@@ -90,14 +90,15 @@ def ena(
             Time clip the variables to exactly the range specified in the trange keyword.
             (default: True)
 
-        force_download=False,
-            **force_downloadの説明文を追記する
+        force_download: bool,
+            Download file even if local version is more recent than server version.
             (default: False)
         
         uname = str
         passwd = str
-            We constrain the person for providing l2pre data.
-            Please ask the CHS members to issue your username and password.
+            Password for accessing restricted data products.
+            Please contact the PI teams (or the project team) to obtain authentication credentials.
+            Access to l2pre data is restricted and generally limited to project members.
         
         files: list of str
             Set data file paths explicitly to load data from local files.

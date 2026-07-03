@@ -1,5 +1,6 @@
 #/miopyspedas/miopyspedas/bc/mmo/load.py
 
+import cdflib
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pyspedas import time_clip as tclip
@@ -9,8 +10,8 @@ from .config import CONFIG
 
 def load(trange=["2021-8-10","2021-8-11"], 
         pathformat=None,
-        instrument='spm',
-        data_mode='l',
+        instrument="spm",
+        data_mode="l",
         datatype=None,
         level="l2pre",
         prefix="",
@@ -47,12 +48,12 @@ def load(trange=["2021-8-10","2021-8-11"],
     ------------
         trange: list or str  
             time range of interest [starttime, endtime] with the format 
-            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            ['YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
             (default: ["2021-8-10","2021-8-11"])
         
         level: str
-            Data level (default: l2pre)
+            Data level (default: l2pre) --> after MOI default will be l2
         
         prefix: str
             The tplot variable names will be given this prefix.
@@ -60,7 +61,7 @@ def load(trange=["2021-8-10","2021-8-11"],
 
         suffix: str
             The tplot variable names will be given this suffix.
-            By default, no prefix is added.
+            By default, no suffix is added.
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
@@ -85,7 +86,7 @@ def load(trange=["2021-8-10","2021-8-11"],
             (default: False)
         
         notplot: bool
-            Return the data in hash tables instead of creating tplot variables.
+            Return the data in dict instead of creating tplot variables.
             (default: False)
         
         no_update: bool
@@ -96,16 +97,16 @@ def load(trange=["2021-8-10","2021-8-11"],
             Time clip the variables to exactly the range specified in the trange keyword.
             (default: True)
 
-        force_download=False,
-            **force_downloadの説明文を追記する
+        force_download: bool,
+            Download file even if local version is more recent than server version.
             (default: False)
         
-        uname = str
-        passwd = str
-            We constrain the person for providing l2pre data.
-            Please ask the CHS members to issue your username and password.
+        uname: str
+        passwd: str
+            Password for accessing restricted data products.
+            Please contact the PI teams (or the project team) to obtain authentication credentials.
+            Access to l2pre data is restricted and generally limited to project members.
             
-
     Returns
     ----------
     list of str
@@ -123,8 +124,8 @@ def load(trange=["2021-8-10","2021-8-11"],
     out_files = []
     # Download data files and set their paths unless local file paths are explicitly given
     if files is None:
-        files = download(remote_file=remote_names, remote_path=CONFIG['remote_data_dir'], local_path=CONFIG[
-                     'local_data_dir'], no_download=no_update, last_version=True, username=uname, password=passwd)
+        files = download(remote_file=remote_names, remote_path=CONFIG["remote_data_dir"], local_path=CONFIG[
+                     "local_data_dir"], no_download=no_update, last_version=True, username=uname, password=passwd)
     if files is not None:
         for file in files:
             out_files.append(file)
@@ -141,19 +142,19 @@ def load(trange=["2021-8-10","2021-8-11"],
         if len(out_files) > 0:
             cdf_file = cdflib.CDF(out_files[-1])
             cdf_info = cdf_file.cdf_info()
-            all_cdf_variables = cdf_info['rVariables'] + cdf_info['zVariables']
+            all_cdf_variables = cdf_info["rVariables"] + cdf_info["zVariables"]
             gatt = cdf_file.globalattsget()
             for var in all_cdf_variables:
                 t_plot_name = prefix + var + suffix
                 if t_plot_name in tvars:
                     vatt = cdf_file.varattsget(var)
-                    tvars[t_plot_name]['CDF'] = {'VATT':vatt,
-                                                'GATT':gatt,
-                                                'FILENAME':out_files}
+                    tvars[t_plot_name]['CDF'] = {"VATT":vatt,
+                                                "GATT":gatt,
+                                                "FILENAME":out_files}
         return tvars
 
     if time_clip:
         for new_var in tvars:
-            tclip(new_var, trange[0], trange[1], suffix='')
+            tclip(new_var, trange[0], trange[1], suffix="")
 
     return tvars

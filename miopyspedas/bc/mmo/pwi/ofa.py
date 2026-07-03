@@ -56,7 +56,7 @@ def ofa(
 
         suffix: str
             The tplot variable names will be given this suffix.
-            By default, no prefix is added.
+            By default, no suffix is added.
 
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
@@ -87,12 +87,16 @@ def ofa(
         no_update: bool
             If set, only load data from your local cache.
             (default: False)
-       
+        
+        force_download: bool,
+            Download file even if local version is more recent than server version.
+            (default: False)
+        
         uname = str
         passwd = str
-            We constrain the person for providing l2pre data.
-            Please ask the CHS members to issue your username and password.
-            **uname, passwordを使っている理由を確認する
+            Password for accessing restricted data products.
+            Please contact the PI teams (or the project team) to obtain authentication credentials.
+            Access to l2pre data is restricted and generally limited to project members.
 
         time_clip: bool
             Time clip the variables to exactly the range specified in the trange keyword.
