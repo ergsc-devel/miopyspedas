@@ -140,8 +140,8 @@ def mia(
                     notplot=notplot,
                     no_update=no_update,
                     time_clip=time_clip,
-                    force_download=False,
-                    uname=None, passwd=None,
+                    force_download=force_download,
+                    uname=uname, passwd=uname,
                     files=files
                     )
     if downloadonly is True:    

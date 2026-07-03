@@ -119,13 +119,20 @@ def load(trange=["2021-8-10","2021-8-11"],
 
     # find the full remote path names using the trange
     remote_names = dailynames(file_format=pathformat,
-                              trange=trange, res=file_res)
+                              trange=trange, 
+                              res=file_res)
     
     out_files = []
     # Download data files and set their paths unless local file paths are explicitly given
     if files is None:
-        files = download(remote_file=remote_names, remote_path=CONFIG["remote_data_dir"], local_path=CONFIG[
-                     "local_data_dir"], no_download=no_update, last_version=True, username=uname, password=passwd)
+        files = download(remote_file=remote_names, 
+                         remote_path=CONFIG["remote_data_dir"], 
+                         local_path=CONFIG["local_data_dir"], 
+                         no_download=no_update, 
+                         last_version=True, 
+                         username=uname, 
+                         password=passwd)
+    
     if files is not None:
         for file in files:
             out_files.append(file)
@@ -135,8 +142,13 @@ def load(trange=["2021-8-10","2021-8-11"],
     if downloadonly:
         return out_files
 
-    tvars = cdf_to_tplot(out_files, prefix=prefix, suffix=suffix, get_support_data=get_support_data,
-                         varformat=varformat, varnames=varnames, notplot=notplot)
+    tvars = cdf_to_tplot(out_files, 
+                         prefix=prefix, 
+                         suffix=suffix, 
+                         get_support_data=get_support_data,
+                         varformat=varformat, 
+                         varnames=varnames, 
+                         notplot=notplot)
 
     if notplot:
         if len(out_files) > 0:
