@@ -1,5 +1,5 @@
 from ..load import load
-from pytplot import options
+from pyspedas import options
 
 import logging
 
