@@ -115,8 +115,10 @@ def am2p(
         initial_notplot_flag = True
 
     file_res = 3600. * 24
-    if datatype = "spec":
-        prefix = 'mmo_pwi_am2p_'+level+'_'+data_mode+'_'+obs_mode+'_'
+    if datatype == "spec":
+        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'-'+obs_mode+'_'
+    elif datatype == "cal":
+        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+obs_mode+'_'
 
     if local_dir: 
         pathformat = local_dir+\
@@ -141,7 +143,7 @@ def am2p(
                     no_update=no_update,
                     time_clip=time_clip,
                     force_download=False,
-                    uname=None, passwd=None
+                    uname=uname, passwd=passwd
                     )
 
     if initial_notplot_flag or downloadonly:

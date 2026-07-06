@@ -46,7 +46,7 @@ def mgf(
                     no_update=no_update,
                     time_clip=time_clip,
                     force_download=force_download,
-                    uname=uname, passwd=uname,
+                    uname=uname, passwd=passwd,
                     )
 
     return mgf_vars
