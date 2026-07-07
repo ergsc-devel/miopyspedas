@@ -12,7 +12,7 @@ def am2p(
         level: str = 'l2',
         data_mode: str = 'l',
         datatype: str = 'spec',
-        obs_mode: str = None,
+        obs_mode: str = '',
         prefix: str = '',
         suffix: str = '',
         local_dir:Optional[str] = None,
