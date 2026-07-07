@@ -107,7 +107,7 @@ def am2p(
         List of tplot variables created.
 
     Sample data of the MIA is located at the CHS repository
-    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/pwi/ofa/l2/spec/2023/02/bc_mmo_pwi-_l2p_l-spec-ms_20230228_r01-v00-00.cdf
+    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/pwi/ofa/l2/spec/2023/02/bc_mmo_pwi-am2p_l2_l-spec_20230228_r01-v00-00.cdf
     """
 
     initial_notplot_flag = False
@@ -115,17 +115,41 @@ def am2p(
         initial_notplot_flag = True
 
     file_res = 3600. * 24
-    if datatype == "spec":
-        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'-'+obs_mode+'_'
-    elif datatype == "cal":
-        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+obs_mode+'_'
 
-    if local_dir: 
-        pathformat = local_dir+\
-            '/%Y/%m/bc_mmo_pwi-ofa_'+level+'_'+data_mode+'-'+datatype+'-'+obs_mode+'_%Y%m%d_r??-v??-??.cdf'
+    # --- Normalize the requested level FIRST, before deciding prefix/suffix or
+    #     building the path, so that `level` becomes a single clean canonical
+    #     value we can rely on everywhere below (path, prefix, load() call).
+    #
+    # normalization / use lower capitals --> remove space --> "level" to "l"
+    # e.g. "level 2 pre", "L2PRE", "l2 p" --> "l2pre"
+    level_key = level.lower().replace(" ", "").replace("level", "l")
+
+    if level_key in ("l2pre", "l2p"):
+        level = "l2pre"
+    elif level_key in ("l2", "l3"):
+        level = level_key
     else:
-        pathformat = 'satellite/mmo/cdf/pwi/ofa/'+level+'/'+datatype+'/'+data_mode + \
-            '/%Y/%m/bc_mmo_pwi-ofa_'+level+'_'+data_mode+'-'+datatype+'-'+obs_mode+'_%Y%m%d_r??-v??-??.cdf'
+        raise ValueError(f"Unsupported level: {level!r}")
+    
+    if datatype == "spec":
+        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+datatype+'_'
+
+        if local_dir: 
+            pathformat = local_dir+\
+                '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+'_%Y%m%d_r??-v??-??.cdf'
+        else:
+            pathformat = 'satellite/mmo/cdf/pwi/am2p/'+level+'/'+datatype+'/'+data_mode + \
+                '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+'_%Y%m%d_r??-v??-??.cdf'
+
+    elif datatype == "cal":
+        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+datatype+'-' + obs_mode + '_'
+        if local_dir: 
+            pathformat = local_dir+\
+                '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+ '-'+ obs_mode +'_%Y%m%d_r??-v??-??.cdf'
+        else:
+            pathformat = 'satellite/mmo/cdf/pwi/am2p/'+level+'/'+datatype+'/'+data_mode + \
+                '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+ '-'+ obs_mode +'_%Y%m%d_r??-v??-??.cdf'
+
 
     loaded_data = load(trange=trange,
                     instrument='am2p', 
