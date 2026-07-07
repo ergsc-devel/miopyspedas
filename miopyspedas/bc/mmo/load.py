@@ -8,6 +8,33 @@ from pyspedas import cdf_to_tplot
 
 from .config import CONFIG
 
+
+def load(trange=["2021-8-10","2021-8-11"], 
+        pathformat=None,
+        instrument="spm",
+        data_mode="l",
+        datatype=None,
+        level="l2pre",
+        prefix="",
+        suffix="",
+        get_support_data=False,
+        varformat=None,
+        varnames=[],
+        downloadonly=False,
+        notplot=False,
+        no_update=False,
+        time_clip=True,
+        force_download=False,
+        uname=None, 
+        passwd=None,
+        files=None,
+        mode=None,
+        site=None,
+        model=None,
+        file_res=24*3600.,
+        version=None,
+        ):
+
     """
     This function is not meant to be called directly; please see the instrument specific wrappers:
         pyspedas.projects.mmo.spm()
@@ -126,7 +153,10 @@ from .config import CONFIG
         if len(out_files) > 0:
             cdf_file = cdflib.CDF(out_files[-1])
             cdf_info = cdf_file.cdf_info()
-            # cdflib >= 1.0 returns a CDFInfo dataclass, so use attribute access.
+            # cdflib >= 1.0 returns a CDFInfo dataclass, so use attribute access
+            # (older versions returned a dict). Confirmed on cdflib 1.3.8.
+            # cdflib 1.0 以降は CDFInfo データクラスを返すため属性アクセスを使う
+            # （旧版は辞書だった）。cdflib 1.3.8 で確認済み。
             all_cdf_variables = cdf_info.rVariables + cdf_info.zVariables
             gatt = cdf_file.globalattsget()
             for var in all_cdf_variables:
