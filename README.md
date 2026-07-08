@@ -58,7 +58,7 @@ An example code for Jupyter notebooks
 
 ```python
 import miopyspedas
-from pytplot import tplot, store_data, options, get_data
+from pyspedas import tplot, store_data, options, get_data
 import pyspedas
 ```
 
