@@ -138,16 +138,6 @@ def mgf(
         case _:
             raise ValueError(f"Unsupported data rate: {rate!r}")
 
-    # Set a format of file path
-    if level == "l2pre":
-        # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l_scf_20250107_r01-v00-00.cdf"
-        pathformat = (
-                "satellite/mmo/cdf/mgf/" + level
-                + "/" + rate + "/%Y/%m/"
-                + "bc_mmo_mgf_" + level[:3] + '_' + rate
-                + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
-                )
-
     # Normalize the reference frame name
     coord = coord.lower()
 
@@ -160,6 +150,22 @@ def mgf(
                 coord = "xsm"
             case _:
                 raise ValueError(f"Unsupported level: {level!r}")
+
+    # Set a format of file path
+    if level == "l2pre":
+    match level:
+        case "l2pre":
+            # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l_scf_20250107_r01-v00-00.cdf"
+            pathformat = (
+                    "satellite/mmo/cdf/mgf/" + level
+                    + "/" + rate + "/%Y/%m/"
+                    + "bc_mmo_mgf_" + level[:3] + '_' + rate
+                    + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
+                    )
+        case "l2":
+
+        case _:
+            raise ValueError(f"Unsupported level: {level!r}")
             
     # Add a default prefix ONLY when the user did not specify one, so that tplot
     # variable names identify the mission/instrument/level. A user-supplied
