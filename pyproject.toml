@@ -24,7 +24,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-dependencies = ["pyspedas>=1.2.8"]
+dependencies = ["pyspedas>=2.0"]
 
 [tool.setuptools]
 packages = {find = {exclude = ["contrib", "docs", "tests*"]}}
