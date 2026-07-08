@@ -4,8 +4,10 @@ from pyspedas import options
 import logging
 
 def mgf(
-    trange=["2021-8-10","2021-8-11"],
+    trange=["2025-01-07","2025-01-09"],
     level="l2pre",
+    rate="l",
+    coord="scf",
     prefix="",
     suffix="",
     get_support_data=False,
@@ -20,7 +22,8 @@ def mgf(
 ):
 
     """
-    This function loads data from the Solar Particle Monitor (SPM)
+    This function loads data from Fluxgate Magnetometer (MGF) on
+    board Mercury Magnetospheric Orbiter (MMO/Mio).
     
     Parameters (Draft)
     ------------
@@ -28,17 +31,27 @@ def mgf(
             time range of interest [starttime, endtime] with the format 
             ['YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
-            (default: ["2021-8-10","2021-8-11"])
+            (default: ["2025-01-07","2025-01-09"])
         
         level: str
-            Data level (default: l2pre) --> after MOI default will be l2
+            Data level
+            (default: "l2pre") --> after MOI default will be "l2"
+
+        rate: str
+            Date rate mode "l", "m1", "m2", or "h"
+            L-mode: ~4s, M1-mode: 8 Hz, M2-mode: 4 Hz, H-mode: 128 Hz
+            (default: "l")
         
+        coord: str
+            Reference frame of a magnetic vector
+            (default: "scf" for the Level-2 pre data)
+
         prefix: str
             The tplot variable names will be given this prefix.
-            If not specified, a default prefix "mmo_spm_<level>_"
-            (e.g. "mmo_spm_l2pre_") is added automatically.
+            If not specified, a default prefix "mmo_mgf_<level>_<rate>_".
+            (e.g. "mmo_mgf_l2pre_l_") is added automatically.
             Pass your own string to override it.
-            (default: "" -> "mmo_mgf_l2pre_")
+            (default: "" -> "mmo_mgf_l2pre_l_")
 
         suffix: str
             The tplot variable names will be given this suffix.
@@ -47,8 +60,7 @@ def mgf(
         get_support_data: bool
             Data with an attribute "VAR_TYPE" with a value of "support_data"
             will be loaded into tplot. 
-            By default, only loads in data with a 
-            "VAR_TYPE" attribute of "data".
+            By default, only loads in data with a "VAR_TYPE" attribute of "data".
             (default: False)
 
         varformat: str
@@ -92,14 +104,12 @@ def mgf(
     ----------
         List of tplot variables created.
 
-    Sample data of the SPM is located at the CHS repository
-    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
     """
 
     
-    # --- Normalize the requested level FIRST, before deciding prefix/suffix or
-    #     building the path, so that `level` becomes a single clean canonical
-    #     value we can rely on everywhere below (path, prefix, load() call).
+    # Normalize the requested level FIRST, before deciding prefix/suffix or
+    # building the path, so that `level` becomes a single clean canonical
+    # value we can rely on everywhere below (path, prefix, load() call).
     #
     # normalization / use lower capitals --> remove space --> "level" to "l"
     # e.g. "level 2 pre", "L2PRE", "l2 p" --> "l2pre"
@@ -113,24 +123,33 @@ def mgf(
     else:
         raise ValueError(f"Unsupported level: {level!r}")
     
+    # Normalize the requested data rate
+    rate_key = rate.lower().replace(" ","").replace("-","").replace("mode","")
+    match rate_key:
+        case "l" | "low":
+            rate = "l"
+        case "m1" | "m":
+            rate = "m1"
+        case "m2":
+            rate = "m2"
+        case "h" | "high":
+            rate = "h"
+        case _:
+            raise ValueError(f"Unsupported data rate: {rate!r}")
+
     if level == "l2pre":
         pathformat = (
                 "satellite/mmo/cdf/mgf/" + level
-                + "/cnt/%Y/%m/"
+                + "/" + rate + "/%Y/%m/"
                 + "bc_mmo_mgf_" + level[:3]
-                + "_cnt_%Y%m%d_r??-v??-??.cdf"
+                + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
                 )
-            # https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
-            # for spm: level=l2pre, datatype=
-            # The directory uses `level` (=l2pre) directly, while the file name uses the
-            # short token "l2p", derived here from `level` so we keep only one variable.
-    
 
     # Add a default prefix ONLY when the user did not specify one, so that tplot
     # variable names identify the mission/instrument/level. A user-supplied
     # prefix is respected and never overwritten.
     if prefix == "":
-        prefix = "mmo_mgf_" + level + "_"
+        prefix = "mmo_mgf_" + level + "_" + rate + "_" 
 
     mgf_vars = load(trange=trange,
                     instrument='mgf',
