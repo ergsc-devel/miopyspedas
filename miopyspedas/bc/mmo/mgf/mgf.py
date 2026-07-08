@@ -140,10 +140,11 @@ def mgf(
 
     # Set a format of file path
     if level == "l2pre":
+        # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l_scf_20250107_r01-v00-00.cdf"
         pathformat = (
                 "satellite/mmo/cdf/mgf/" + level
                 + "/" + rate + "/%Y/%m/"
-                + "bc_mmo_mgf_" + level[:3]
+                + "bc_mmo_mgf_" + level[:3] + '_' + rate
                 + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
                 )
 
