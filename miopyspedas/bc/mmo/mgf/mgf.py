@@ -7,7 +7,7 @@ def mgf(
     trange=["2025-01-07","2025-01-09"],
     level="l2pre",
     rate="l",
-    coord="scf",
+    coord="",
     prefix="",
     suffix="",
     get_support_data=False,
@@ -44,7 +44,7 @@ def mgf(
         
         coord: str
             Reference frame of a magnetic vector
-            (default: "scf" for the Level-2 pre data)
+            (default: l2pre --> "scf", l2 --> "xsm")
 
         prefix: str
             The tplot variable names will be given this prefix.
@@ -125,6 +125,7 @@ def mgf(
     
     # Normalize the requested data rate
     rate_key = rate.lower().replace(" ","").replace("-","").replace("mode","")
+
     match rate_key:
         case "l" | "low":
             rate = "l"
@@ -137,6 +138,7 @@ def mgf(
         case _:
             raise ValueError(f"Unsupported data rate: {rate!r}")
 
+    # Set a format of file path
     if level == "l2pre":
         pathformat = (
                 "satellite/mmo/cdf/mgf/" + level
@@ -145,6 +147,19 @@ def mgf(
                 + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
                 )
 
+    # Normalize the reference frame name
+    coord = coord.lower()
+
+    # Set reference frame
+    if coord == "":
+        match level:
+            case "l2pre":
+                coord = "scf"
+            case "l2":
+                coord = "xsm"
+            case _:
+                raise ValueError(f"Unsupported level: {level!r}")
+            
     # Add a default prefix ONLY when the user did not specify one, so that tplot
     # variable names identify the mission/instrument/level. A user-supplied
     # prefix is respected and never overwritten.
