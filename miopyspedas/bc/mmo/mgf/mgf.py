@@ -152,7 +152,6 @@ def mgf(
                 raise ValueError(f"Unsupported level: {level!r}")
 
     # Set a format of file path
-    if level == "l2pre":
     match level:
         case "l2pre":
             # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l_scf_20250107_r01-v00-00.cdf"
