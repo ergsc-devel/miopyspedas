@@ -161,7 +161,7 @@ def mgf(
                     + "bc_mmo_mgf_" + level[:3] + '_' + rate
                     + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
                     )
-        case "l2":
+#####        case "l2":
 
         case _:
             raise ValueError(f"Unsupported level: {level!r}")
