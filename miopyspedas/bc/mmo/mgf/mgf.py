@@ -170,7 +170,7 @@ def mgf(
     # variable names identify the mission/instrument/level. A user-supplied
     # prefix is respected and never overwritten.
     if prefix == "":
-        prefix = "mmo_mgf_" + level + "_" + rate + "_" 
+        prefix = "mmo_mgf_" + level[:3] + "_" + rate + "_" 
 
     mgf_vars = load(trange=trange,
                     instrument='mgf',
