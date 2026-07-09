@@ -1,5 +1,5 @@
 from ....mmo.load import load
-from pyspedas import store_data, tplot_names,tnames
+from pyspedas import store_data, tplot_names, tnames
 from pyspedas import options, ylim, zlim, get_data
 
 from typing import List, Optional
@@ -132,8 +132,9 @@ def am2p(
         raise ValueError(f"Unsupported level: {level!r}")
     
     if datatype == "spec":
-        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+datatype+'_'
-
+        if prefix == "":
+            prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+datatype+'_'
+        
         if local_dir: 
             pathformat = local_dir+\
                 '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+'_%Y%m%d_r??-v??-??.cdf'
@@ -142,7 +143,9 @@ def am2p(
                 '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+'_%Y%m%d_r??-v??-??.cdf'
 
     elif datatype == "cal":
-        prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+datatype+'-' + obs_mode + '_'
+        if prefix == "":
+            prefix = 'mmo_pwi-am2p_'+level+'_'+data_mode+'_'+datatype+'-' + obs_mode + '_'
+        
         if local_dir: 
             pathformat = local_dir+\
                 '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+ '-'+ obs_mode +'_%Y%m%d_r??-v??-??.cdf'
@@ -151,7 +154,7 @@ def am2p(
                 '/%Y/%m/bc_mmo_pwi-am2p_'+level+'_'+data_mode+'-'+datatype+ '-'+ obs_mode +'_%Y%m%d_r??-v??-??.cdf'
 
 
-    loaded_data = load(trange=trange,
+    am2p_vars = load(trange=trange,
                     instrument='am2p', 
                     pathformat=pathformat,
                     level=level,
@@ -171,56 +174,33 @@ def am2p(
                     )
 
     if initial_notplot_flag or downloadonly:
-        return loaded_data
+        return am2p_vars
 
     # set spectrogram plot option
-    options(prefix+'spec_e*'+suffix,  'Spec', 1)
-    options(prefix+'spec_b*'+suffix,  'Spec', 1)
-
-    # set y axis to logscale
-    options(prefix+'spec_e*'+suffix,  'ylog', 1)
-    options(prefix+'spec_b*'+suffix,  'ylog', 1)
-
-    #  Merge spectrogram
-    match data_mode:
-        case 'l':
-            store_data(prefix+'e_spectra_merged', data=tnames(prefix+'spec_e_*'))
-            store_data(prefix+'b_spectra_merged', data=tnames(prefix+'spec_b_*'))  
-            options(prefix+'e_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (E)')
-            options(prefix+'b_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (B)')
-        case 'm':
-            store_data(prefix+'ex_spectra_merged', data=tnames(prefix+'spec_ex_*'))
-            store_data(prefix+'ey_spectra_merged', data=tnames(prefix+'spec_ey_*'))
-
-            store_data(prefix+'by_spectra_merged', data=tnames(prefix+'spec_by_*'))
-            store_data(prefix+'bz_spectra_merged', data=tnames(prefix+'spec_bz_*'))
-
-            options(prefix+'ex_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ex)')
-            options(prefix+'ey_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ey)')
-
-            options(prefix+'by_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (By)')
-            options(prefix+'bz_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Bz)')
-
+    options(prefix+'*power_*'+suffix,  'Spec', 1)
+    options(prefix+'*phase_*'+suffix,  'Spec', 1)
 
     # set ysubtitle
-    options(tnames(prefix+'*_spectra_*'+suffix),  'ysubtitle', 'frequency [kHz]')
+    options(tnames(prefix+'*power_*'+suffix),  'ysubtitle', 'frequency [kHz]')
+    options(tnames(prefix+'*phase_*'+suffix),  'ysubtitle', 'frequency [kHz]')
     
     # set yrange
-    options(tnames(prefix+'*_spectra_*'+suffix),  'yrange', [1e1,1e5])
+    options(tnames(prefix+'*power_*'+suffix),  'y_range', [0.128, 143.3598633])
+    options(tnames(prefix+'*phase_*'+suffix),  'y_range', [0.128, 143.3598633])
     
     # set y axis to logscale
-    options(tnames(prefix+'*_spectra_*'+suffix),  'ylog', 1)
+    options(tnames(prefix+'*power_*'+suffix),  'ylog', 1)
+    options(tnames(prefix+'*phase_*'+suffix),  'ylog', 1)
     
     # set ztitle
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'ztitle', 'dBmVpp')
-    options(tnames(prefix+'b*_spectra_*'+suffix),  'ztitle', 'pT^2/Hz')
+    options(tnames(prefix+'*power_*'+suffix),  'ztitle', 'dB')
+    options(tnames(prefix+'*phase_*'+suffix),  'ztitle', 'rad')
+
+    # set zrange
+    options(tnames(prefix+'*power_*'+suffix),  'z_range', [0, 82])
+    options(tnames(prefix+'*phase_*'+suffix),  'z_range', [0, 6.28])
 
     # set z axis to logscale
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'zlog', 1)
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'zlog', 1)
+    options(tnames(prefix+'*power_*'+suffix),  'zlog', 1)
 
-    # change colormap option
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'Colormap', 'jet')
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'Colormap', 'jet')
-
-    return loaded_data
+    return am2p_vars

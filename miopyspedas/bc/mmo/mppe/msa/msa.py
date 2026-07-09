@@ -2,6 +2,7 @@ from ....mmo.load import load
 from pyspedas import options
 
 import logging
+from typing import List, Optional
 
 def msa(
         trange: List[str] = ['2025-1-8','2025-1-9'],
@@ -125,9 +126,9 @@ def msa(
     
     if prefix == '':
         if obs_mode != '':
-            prefix = 'mmo_msa_'+lev+'_'+data_mode+'_'+datatype+'_'
+            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'_'+datatype+'_'
         else:
-            prefix = 'mmo_msa_'+lev+'_'+data_mode+'_'+obs_mode+'_'+datatype+'_'
+            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'_'+obs_mode+'_'+datatype+'_'
     
     if obs_mode != '':
         data_mode = data_mode+'-'+obs_mode
