@@ -2,6 +2,7 @@ from ....mmo.load import load
 from pyspedas import options
 
 import logging
+from typing import List, Optional
 
 def msa(
         trange: List[str] = ['2025-1-8','2025-1-9'],
