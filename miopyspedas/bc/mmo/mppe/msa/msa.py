@@ -126,9 +126,9 @@ def msa(
     
     if prefix == '':
         if obs_mode == '':
-            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'_'+datatype+'_'
+            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'-'+datatype+'_'
         else:
-            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'_'+obs_mode+'_'+datatype+'_'
+            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'-'+obs_mode+'-'+datatype+'_'
     
     if obs_mode != '':
         data_mode = data_mode+'-'+obs_mode
