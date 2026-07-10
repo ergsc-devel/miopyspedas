@@ -16,3 +16,4 @@ from .bc.mmo.mppe.mia.mia import mia
 from .bc.mmo.mppe.msa.msa import msa
 from .bc.mmo.mppe.ena.ena import ena
 from .bc.mmo.pwi.ofa import ofa
+from .bc.mmo.pwi.sorbet import sorbet

@@ -4,11 +4,10 @@ from pyspedas import options
 import logging
 from typing import List, Optional
 
-def msa(
-        trange: List[str] = ['2025-1-8','2025-1-9'],
+def sorbet( trange: List[str] = ['2025-4-10','2025-4-11'],
         level: str = 'l2p',
-        data_mode: str = 'l',
-        datatype: str = 'eflux-moments-tof',
+        data_mode: str = 'lm',
+        datatype: str = 'tnr-e',
         obs_mode: str = '',
         prefix: str = '',
         suffix: str = '',
@@ -27,7 +26,7 @@ def msa(
         files=None
 ):
     """
-    This function loads data from the Mercury Plasma Particle Experiment (MPPE) - Mercury mass Spectrum Analyzer (MSA) onboard the MMO spacecraft.
+    This function loads data from the Plasma Wave Investigation (PWI) - Spectroscopie Ondes Radio & Bruit Electrostatique Thermique (SORBET) onboard the MMO spacecraft.
     
     Parameters
     ------------
@@ -41,13 +40,13 @@ def msa(
             Data level (default: l2p)
         
         data_mode: str
-            Data rate mode, 'l' for the low data rate mode (L-mode; default), 'm' for M-mode
+            Data rate mode, 'lm' for the low-medium data rate mode (LM-mode; default)
         
         datatype: str
-            Data type, 'eflux-moments-tof' (default, L-mode), 'omnieflux-moments-tof', '3deflux', 'tof', 'moments', 'events'
+            Data type, 'tnr-e' (default), 'hfr-e', 'tnr-dbsc', 'tnr-e-cross-b'
         
         obs_mode: str
-            Observation mode, 'survey', 'spatial', 'temporal', 'event' (only for M-mode)
+            Observation mode, ''
 
         prefix: str
             The tplot variable names will be given this prefix.
@@ -109,8 +108,8 @@ def msa(
     ----------
         List of tplot variables created.
 
-    Sample data of the MSA is located at the CHS repository
-    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/mppe/msa/l2pre/l/eflux-moments-tof/2025/01/bc_mmo_mppe-msa_l2p_l-eflux-moments-tof_20250108_r01-v02-00.cdf
+    Sample data of the SORBET is located at the CHS repository
+    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/pwi/sorbet/l2pre/lm/tnr-e/2025/04/bc_mmo_pwi-sorbet_l2p_lm-tnr-e_20250410_r00-v00-02.cdf
     """
 
     if suffix is None:
@@ -126,9 +125,9 @@ def msa(
     
     if prefix == '':
         if obs_mode == '':
-            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'_'+datatype+'_'
+            prefix = 'mmo_pwi_sorbet_'+lev+'_'+data_mode+'_'+datatype+'_'
         else:
-            prefix = 'mmo_mppe_msa_'+lev+'_'+data_mode+'_'+obs_mode+'_'+datatype+'_'
+            prefix = 'mmo_pwi_sorbet_'+lev+'_'+data_mode+'_'+obs_mode+'_'+datatype+'_'
     
     if obs_mode != '':
         data_mode = data_mode+'-'+obs_mode
@@ -142,14 +141,14 @@ def msa(
     if files is None:
         if local_dir: 
             pathformat = local_dir+\
-                f'/%Y/%m/bc_mmo_mppe-msa_{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf'
+                f'/%Y/%m/bc_mmo_pwi-sorbet_{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf'
         else:
-            pathformat = f'satellite/mmo/cdf/mppe/msa/{level}/{data_mode}/{datatype}' + \
-                f'/%Y/%m/bc_mmo_mppe-msa_{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf'
+            pathformat = f'satellite/mmo/cdf/pwi/sorbet/{level}/{data_mode}/{datatype}' + \
+                f'/%Y/%m/bc_mmo_pwi-sorbet_{lev}_{data_mode}-{datatype}_%Y%m%d_r??-v??-??.cdf'
 
     
     loaded_data = load(trange=trange,
-                    instrument='msa', 
+                    instrument='sorbet', 
                     pathformat=pathformat,
                     level=level,
                     datatype=datatype,
@@ -174,21 +173,45 @@ def msa(
     
     # Decorate tplot variables
     if level == 'l2pre':
-        if data_mode == 'l':
+        if data_mode == 'lm':
             match datatype:
-                case 'eflux-moments-tof':
-                    options( prefix+'deflux_*', 'spec', 1)
-                    options( prefix+'deflux_*', 'yrange', [1.0e0, 4.0e4])
-                    options( prefix+'deflux_*', 'ylog', 1)
-                    options( prefix+'deflux_*', 'ysubtitle', '[eV]')
-                    options( prefix+'deflux_*', 'zlog', 1)
-                    options( prefix+'deflux_*', 'zrange', [1e5, 5e8])
-                    options( prefix+'deflux_*', 'ztitle', '[eV/cm^2/sr/s/eV]')
-                    options( prefix+'deflux_h_plus'+suffix, 'ytitle', 'BC/MMO\nMSA L2p\nH+ Energy')
-                    options( prefix+'deflux_alphas'+suffix, 'ytitle', 'BC/MMO\nMSA L2p\nHe++ Energy')
-                    options( prefix+'deflux_heavies'+suffix, 'ytitle', 'BC/MMO\nMSA L2p\nHeavy Ion\nEnergy')
-                    options( prefix+'deflux_total'+suffix, 'ytitle', 'BC/MMO\nMSA L2p\nTotal Ion\nEnergy')
-                    
+                case 'tnr-e':
+                    options( prefix+'E?_power*', 'spec', 1)
+                    options( prefix+'E?_power*', 'yrange', [2e3, 7e5])
+                    options( prefix+'E?_power*', 'ylog', 1)
+                    options( prefix+'E?_power*', 'ysubtitle', '[Hz]')
+                    options( prefix+'E?_power*', 'zlog', 1)
+                    options( prefix+'E?_power'+suffix, 'ztitle', '[W/m^2/Hz] rms')
+                    options( prefix+'E?_power_v2'+suffix, 'ztitle', '[V^2/Hz] rms')
+                    options( prefix+'E?_power_db'+suffix, 'ztitle', '[edB] rms')
+                    options( prefix+'Eu_power'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nSpectral flux density!CEu (WPT)')
+                    options( prefix+'Ev_power'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nSpectral flux density!CEv (MEF)')
+                    options( prefix+'Eu_power_v2'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nPower spectral density!CEu (WPT)')
+                    options( prefix+'Ev_power_v2'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nPower spectral density!CEv (MEF)')
+                    options( prefix+'Eu_power_db'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nPower above BG!CEu (WPT)')
+                    options( prefix+'Ev_power_db'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nPower above BG!CEv (MEF)')
+                    options( prefix+'EuEv_cross_?'+suffix, 'spec', 1)
+                    options( prefix+'EuEv_cross_?'+suffix, 'yrange', [2e3, 7e5])
+                    options( prefix+'EuEv_cross_?'+suffix, 'ylog', 1)
+                    options( prefix+'EuEv_cross_?'+suffix, 'ysubtitle', '[Hz]')
+                    options( prefix+'EuEv_cross_?'+suffix, 'zlog', 1)
+                    options( prefix+'EuEv_cross_?'+suffix, 'ztitle', '')
+                    options( prefix+'EuEv_cross_r'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nReal part of!Ccross-correlation (EuEv)')
+                    options( prefix+'EuEv_cross_i'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nImaginary part of!Ccross-correlation (EuEv)')
+                case 'hfr-e':
+                    options( prefix+'Eu_power*', 'spec', 1)
+                    options( prefix+'Eu_power*', 'yrange', [5e5, 1.1e7])
+                    options( prefix+'Eu_power*', 'ylog', 1)
+                    options( prefix+'Eu_power*', 'ysubtitle', '[Hz]')
+                    options( prefix+'Eu_power*', 'zlog', 1)
+                    options( prefix+'Eu_power'+suffix, 'ztitle', '[W/m^2/Hz] rms')
+                    options( prefix+'Eu_power_v2'+suffix, 'ztitle', '[V^2/Hz] rms')
+                    options( prefix+'Eu_power_db'+suffix, 'ztitle', '[edB] rms')
+                    options( prefix+'Eu_power'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nSpectral flux density!CEu (WPT)')
+                    options( prefix+'Eu_power_v2'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nPower spectral density!CEu (WPT)')
+                    options( prefix+'Eu_power_db'+suffix, 'ytitle', 'BC/MMO-PWI\nSORBET L2p\nPower above BG!CEu (WPT)')
+
+
         elif data_mode == "m":
             # Currently, only L-mode data is available
             print("M-mode data is currently not available.")
