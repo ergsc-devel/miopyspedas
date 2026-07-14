@@ -6,7 +6,8 @@ import logging
 def mgf(
     trange=["2025-01-07","2025-01-09"],
     level="l2pre",
-    rate="l",
+    data_mode="l",
+    datatype="",
     coord="",
     prefix="",
     suffix="",
@@ -37,11 +38,14 @@ def mgf(
             Data level
             (default: "l2pre") --> after MOI default will be "l2"
 
-        rate: str
+        data_mode: str
             Date rate mode "l", "m1", "m2", or "h"
             L-mode: ~4s, M1-mode: 8 Hz, M2-mode: 4 Hz, H-mode: 128 Hz
             (default: "l")
-        
+  
+        datatype: str
+            Currently this keyword is not used.
+      
         coord: str
             Reference frame of a magnetic vector
             (default: l2pre --> "scf", l2 --> "xsm")
@@ -123,20 +127,20 @@ def mgf(
     else:
         raise ValueError(f"Unsupported level: {level!r}")
     
-    # Normalize the requested data rate
-    rate_key = rate.lower().replace(" ","").replace("-","").replace("mode","")
+    # Normalize the requested data rate mode
+    data_mode_key = data_mode.lower().replace(" ","").replace("-","").replace("mode","")
 
-    match rate_key:
+    match data_mode_key:
         case "l" | "low":
-            rate = "l"
+            data_mode = "l"
         case "m1" | "m":
-            rate = "m1"
+            data_mode = "m1"
         case "m2":
-            rate = "m2"
+            data_mode = "m2"
         case "h" | "high":
-            rate = "h"
+            data_mode = "h"
         case _:
-            raise ValueError(f"Unsupported data rate: {rate!r}")
+            raise ValueError(f"Unsupported data rate mode: {data_mode!r}")
 
     # Normalize the reference frame name
     coord = coord.lower()
@@ -157,8 +161,8 @@ def mgf(
             # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l_scf_20250107_r01-v00-00.cdf"
             pathformat = (
                     "satellite/mmo/cdf/mgf/" + level
-                    + "/" + rate + "/%Y/%m/"
-                    + "bc_mmo_mgf_" + level[:3] + '_' + rate
+                    + "/" + data_mode + "/%Y/%m/"
+                    + "bc_mmo_mgf_" + level[:3] + '_' + data_mode
                     + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
                     )
 #####        case "l2":
@@ -170,7 +174,7 @@ def mgf(
     # variable names identify the mission/instrument/level. A user-supplied
     # prefix is respected and never overwritten.
     if prefix == "":
-        prefix = "mmo_mgf_" + level[:3] + "_" + rate + "_" 
+        prefix = "mmo_mgf_" + level[:3] + "_" + data_mode + "_" 
 
     mgf_vars = load(trange=trange,
                     instrument='mgf',
