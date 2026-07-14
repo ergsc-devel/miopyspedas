@@ -9,7 +9,9 @@ from .mgf import mgf
 # MPPE
 from .mppe.ena import ena
 from .mppe.mia import mia
+from .mppe.hep import hepe
 from .mppe.msa import msa
+from .mppe.mea import mea
 
 # PWI
 from .pwi.ofa import ofa
