@@ -121,7 +121,7 @@ def ena(
         lev = level
     
     if prefix == "":
-        prefix = "mmo_ena_"+lev+"_"+data_mode+"_"+datatype+"-"+obs_mode+'_'
+        prefix = "mmo_mppe_ena_"+lev+"_"+data_mode+"_"+datatype+"-"+obs_mode+'_'
     
     
     if files is None:
