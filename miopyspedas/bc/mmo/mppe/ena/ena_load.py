@@ -5,7 +5,7 @@ from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pyspedas import time_clip as tclip
 ##### from pyspedas import cdf_to_tplot
-import miopyspedas.bc.mmo.mppe.ena.ena_cdf_to_tplot as cdf_to_tplot
+from miopyspedas.bc.mmo.mppe.ena.ena_cdf_to_tplot import cdf_to_tplot
 from ...config import CONFIG
 
 

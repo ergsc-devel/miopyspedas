@@ -19,10 +19,10 @@ import copy
 from collections.abc import Iterable
 
 
-def ena_cdf_to_tplot(filenames, mastercdf=None, varformat=None, exclude_format=None, get_support_data=False, get_metadata=False,
-                     get_ignore_data=False, string_encoding='ascii',
-                     prefix='', suffix='', plot=False, merge=False,
-                     center_measurement=False, notplot=False, varnames=None):
+def cdf_to_tplot(filenames, mastercdf=None, varformat=None, exclude_format=None, get_support_data=False, get_metadata=False,
+                 get_ignore_data=False, string_encoding='ascii',
+                 prefix='', suffix='', plot=False, merge=False,
+                 center_measurement=False, notplot=False, varnames=None):
     """
     This function will automatically create tplot variables from CDF files.  In general, the files should be
     ISTP compliant for this importer to work.  Each variable is read into a new tplot variable (a.k.a an xarray DataArray),
