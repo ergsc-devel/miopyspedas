@@ -781,7 +781,7 @@ def cdf_to_tplot(filenames, mastercdf=None, varformat=None, exclude_format=None,
                                 depend_4 = None
                             elif dep_ndims == 1:
                                 # Not time varying
-                                if dep_dims[0] != ydims[3]:
+                                if dep_dims[0] != ydims[4]:
                                     logging.warning(
                                         "Variable %s DEPEND_4 attribute %s has length %d, but corresponding data dimension has length %d. Removing attribute.",
                                         var, dep_name, dep_dims[0], ydims[4])
@@ -793,7 +793,7 @@ def cdf_to_tplot(filenames, mastercdf=None, varformat=None, exclude_format=None,
                                         "Variable %s multidimensional DEPEND_4 attribute %s has %d elements in first dimension, but data has %d times. Removing attribute.",
                                         var, dep_name, dep_dims[0], num_times)
                                     depend_4 = None
-                                if dep_dims[1] != ydims[3]:
+                                if dep_dims[1] != ydims[4]:
                                     logging.warning(
                                         "Variable %s multidimensional DEPEND_4 attribute %s has %d elements in second dimension, but corresponding data dimension has length %d. Removing attribute.",
                                         var, dep_name, dep_dims[1], ydims[4])
@@ -805,12 +805,12 @@ def cdf_to_tplot(filenames, mastercdf=None, varformat=None, exclude_format=None,
                                         "Variable %s multidimensional DEPEND_4 attribute %s has %d elements in first dimension, but data has %d times. Removing attribute.",
                                         var, dep_name, dep_dims[0], num_times)
                                     depend_4 = None
-                                if dep_dims[1] != ydims[3]:
+                                if dep_dims[1] != ydims[4]:
                                     logging.warning(
                                         "Variable %s multidimensional DEPEND_4 attribute %s has %d elements in second dimension, but corresponding data dimension has length %d. Removing attribute.",
                                         var, dep_name, dep_dims[1], ydims[4])
                                     depend_4 = None
-                                if dep_dims[2] != ydims[3]:
+                                if dep_dims[2] != ydims[4]:
                                     logging.warning(
                                         "Variable %s multidimensional DEPEND_4 attribute %s has %d elements in second dimension, but corresponding data dimension has length %d. Removing attribute.",
                                         var, dep_name, dep_dims[2], ydims[4])
