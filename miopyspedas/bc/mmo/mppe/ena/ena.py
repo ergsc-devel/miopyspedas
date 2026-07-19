@@ -7,7 +7,7 @@ def ena(
         trange=["2020-04-09","2020-04-10"],
         level="l2pre",
         data_mode="l",
-        datatype='mass',
+        datatype="mass",
         obs_mode="np01-nm04",
         prefix="",
         suffix="",
@@ -126,7 +126,7 @@ def ena(
     
     if files is None:
         pathformat = f"satellite/mmo/cdf/mppe/ena/{level}/{data_mode}/{datatype}/{obs_mode}/%Y/%m/" + \
-            f"bc_mmo_mppe-ena_{lev}_{data_mode}-{obs_mode}_%Y%m%d_r??-v??-??.cdf"
+            f"bc_mmo_mppe-ena_{lev}_{data_mode}-{datatype}-{obs_mode}_%Y%m%d_r??-v??-??.cdf"
     
     tvars = load(trange=trange,
                     instrument='ena', 
