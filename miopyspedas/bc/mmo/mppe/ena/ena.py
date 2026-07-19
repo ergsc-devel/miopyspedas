@@ -1,6 +1,6 @@
 ##### from ....mmo.load import load
 from pyspedas import options
-import miopyspedas.bc.mmo.mppe.ena.ena_load as load
+from miopyspedas.bc.mmo.mppe.ena.ena_load import load
 
 import logging
 
