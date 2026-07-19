@@ -6,7 +6,7 @@ from pyspedas.utilities.download import download
 from pyspedas import time_clip as tclip
 ##### from pyspedas import cdf_to_tplot
 import miopyspedas.bc.mmo.mppe.ena.ena_cdf_to_tplot as cdf_to_tplot
-from .config import CONFIG
+from ..config import CONFIG
 
 
 def load(trange=["2021-8-10","2021-8-11"], 
