@@ -36,7 +36,7 @@ def efd(
     force_download: bool = False,
 ):
     """
-    Load PWI/EFD data onboard the BepiColombo Mio spacecraft.
+    Load BepiColombo/Mio PWI/EFD data.
 
     Parameters
     ----------
@@ -53,50 +53,14 @@ def efd(
         "e_spin", "e_waveform", "pot",
         "pot_waveform" or "spec".
 
-    obs_mode : str
-        Observation mode. Reserved for compatibility.
-
     coord : str
-        Coordinate system for e_waveform:
-        "pwi" or "xsm".
-
-    prefix, suffix : str
-        Strings added to tplot variable names.
-
-    local_dir : str, optional
-        Local EFD data directory.
-
-    get_support_data : bool
-        Load CDF support_data variables.
-
-    varformat : str, optional
-        CDF variable wildcard.
-
-    varnames : list of str, optional
-        CDF variable names to load.
-
-    downloadonly : bool
-        Download files without making tplot variables.
-
-    notplot : bool
-        Return dictionaries instead of tplot variables.
-
-    no_update : bool
-        Use only locally cached files.
-
-    uname, passwd : str, optional
-        Authentication credentials.
-
-    time_clip : bool
-        Clip loaded variables to trange.
-
-    force_download : bool
-        Force file download.
+        Coordinate for e_waveform: "pwi" or "xsm".
 
     Returns
     -------
     list or dict
-        Loaded variables, downloaded files, or notplot data.
+        Loaded tplot variables, downloaded files,
+        or notplot data.
     """
 
     if trange is None:
@@ -104,8 +68,6 @@ def efd(
 
     if varnames is None:
         varnames = []
-
-    initial_notplot_flag = notplot
 
     level = level.lower()
     data_mode = data_mode.lower()
@@ -136,9 +98,8 @@ def efd(
         )
         return []
 
-    # Coordinate is used only for electric-field waveform data.
     if datatype == "e_waveform":
-        if coord == "":
+        if not coord:
             coord = "pwi"
 
         if coord not in ("pwi", "xsm"):
@@ -151,8 +112,8 @@ def efd(
 
     file_res = 86400.0
 
-    # Revised IDL:
-    # prefix = mmo_pwi_efd_<level>_<datatype>_
+    # Equivalent to:
+    # prefix = 'mmo_pwi_efd_' + level + '_' + md + '_'
     tplot_prefix = (
         f"{prefix}mmo_pwi_efd_{level}_{datatype}_"
     )
@@ -167,9 +128,7 @@ def efd(
     )
 
     if local_dir:
-        pathformat = (
-            f"{local_dir}/%Y/%m/{filename}"
-        )
+        pathformat = f"{local_dir}/%Y/%m/{filename}"
     else:
         pathformat = (
             "satellite/mmo/cdf/pwi/efd/"
@@ -198,7 +157,7 @@ def efd(
         passwd=passwd,
     )
 
-    if initial_notplot_flag or downloadonly:
+    if notplot or downloadonly:
         return loaded_data
 
     if loaded_data is None:
@@ -213,7 +172,7 @@ def efd(
         )
 
     elif datatype == "e_waveform":
-        _process_waveform(
+        _process_e_waveform(
             tplot_prefix,
             suffix,
             level,
@@ -258,20 +217,14 @@ def _configure_e_spin(
 ) -> None:
 
     if data_mode == "l":
-        components = [
-            "Eu_4hz_xsm",
-            "Ev_4hz_xsm",
-        ]
+        components = ["Eu_4hz_xsm", "Ev_4hz_xsm"]
         labels = [
             ["Eu_4hz_x_xsm", "Eu_4hz_y_xsm"],
             ["Ev_4hz_x_xsm", "Ev_4hz_y_xsm"],
         ]
 
     elif data_mode == "m":
-        components = [
-            "Eu_8hz_xsm",
-            "Ev_8hz_xsm",
-        ]
+        components = ["Eu_8hz_xsm", "Ev_8hz_xsm"]
         labels = [
             ["Eu_8hz_x_xsm", "Eu_8hz_y_xsm"],
             ["Ev_8hz_x_xsm", "Ev_8hz_y_xsm"],
@@ -301,7 +254,7 @@ def _configure_e_spin(
         options(name, "constant", 0)
 
 
-def _process_waveform(
+def _process_e_waveform(
     prefix: str,
     suffix: str,
     level: str,
@@ -322,10 +275,9 @@ def _process_waveform(
     )
 
     for field in fields:
-        component = (
-            f"{field}_waveform_{rate}_{coord}"
-        )
+        component = f"{field}_waveform_{rate}_{coord}"
         name = prefix + component + suffix
+
         data = get_data(name)
 
         if data is None:
@@ -351,33 +303,45 @@ def _process_waveform(
         time_offset = np.asarray(
             data.v,
             dtype=np.float64,
-        )
+        ).squeeze()
 
         if waveform.ndim != 2:
             logging.warning(
-                "%s is not a two-dimensional waveform.",
+                "%s is not a 2-D waveform.",
                 name,
             )
             continue
 
-        if waveform.shape[1] != time_offset.size:
+        # Normalize waveform to (packet, sample).
+        if waveform.shape[1] == time_offset.size:
+            waveform_samples = waveform
+
+        elif waveform.shape[0] == time_offset.size:
+            waveform_samples = waveform.T
+
+        else:
             raise ValueError(
-                "Time-offset dimension does not match "
-                f"waveform data: {name}"
+                f"Offset size does not match {name}: "
+                f"waveform={waveform.shape}, "
+                f"offset={time_offset.size}"
             )
 
-        # CDF time offsets are interpreted as milliseconds.
+        if waveform_samples.shape[0] != packet_time.size:
+            raise ValueError(
+                f"Packet-time size does not match {name}."
+            )
+
+        # Time offsets are expressed in milliseconds.
         time_new = (
             packet_time[:, None]
             + time_offset[None, :] * 1.0e-3
         ).reshape(-1)
 
-        data_new = waveform.reshape(-1)
+        # C-order flattening gives all samples of packet 0,
+        # followed by packet 1, matching time_new.
+        data_new = waveform_samples.reshape(-1)
 
-        metadata = get_data(
-            name,
-            metadata=True,
-        )
+        metadata = get_data(name, metadata=True)
 
         store_data(
             name,
@@ -412,24 +376,27 @@ def _configure_potential(
     waveform: bool,
 ) -> None:
 
-    if not waveform and data_mode == "h":
-        logging.warning(
-            "pot is unavailable for h mode."
-        )
-        return
-
     if waveform:
         rate = {
             "l": "1hz",
             "m": "8hz",
             "h": "32hz",
         }[data_mode]
+
         components = ["Vu1", "Vv1", "Vu2", "Vv2"]
+
     else:
+        if data_mode == "h":
+            logging.warning(
+                "pot is unavailable for h mode."
+            )
+            return
+
         rate = {
             "l": "1hz",
             "m": "8hz",
         }[data_mode]
+
         components = [
             "Vu1",
             "Vv1",
@@ -445,14 +412,10 @@ def _configure_potential(
             )
             description = f"{component} waveform"
         else:
-            variable_component = (
-                f"{component}_{rate}"
-            )
+            variable_component = f"{component}_{rate}"
             description = component
 
-        name = (
-            prefix + variable_component + suffix
-        )
+        name = prefix + variable_component + suffix
 
         options(
             name,
@@ -467,7 +430,6 @@ def _configure_potential(
             [variable_component],
         )
         options(name, "constant", 0)
-
         ylim(name, -2, 2)
 
     _configure_quality(
@@ -515,19 +477,10 @@ def _configure_spectra(
             f"PWI/EFD\n{description}\n"
             f"Lv.{level[1:]}",
         )
-        options(
-            name,
-            "ysubtitle",
-            "Frequency [Hz]",
-        )
-        options(
-            name,
-            "ztitle",
-            "[mV^2/m^2/Hz]",
-        )
+        options(name, "ysubtitle", "Frequency [Hz]")
+        options(name, "ztitle", "[mV^2/m^2/Hz]")
         options(name, "ylog", 0)
         options(name, "zlog", 1)
-        options(name, "Colormap", "jet")
 
         ylim(name, 0, 40)
         zlim(name, 1.0e-8, 1.0e-2)
