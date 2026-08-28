@@ -1,11 +1,14 @@
-from ..load import load
+from ....mmo.load import load
 from pyspedas import options
 
 import logging
 
-def spm(
-        trange=["2021-8-10","2021-8-11"],
+def hepe(
+        trange=["2021-10-1","2021-10-2"],
         level="l2pre",
+        data_mode="l",
+        datatype="cnt",
+        obs_mode=None,
         prefix="",
         suffix="",
         get_support_data=False,
@@ -17,27 +20,34 @@ def spm(
         time_clip=True,
         force_download=False,
         uname=None, passwd=None,
+        files=None,
 ):
     """
-    This function loads data from the Solar Particle Monitor (SPM)
+    This function loads electron data from the Mercury Plasma Particle Experiment (MPPE) - High Energy Particle (HEP) onboard the MMO spacecraft.
     
-    Parameters (Draft)
+    Parameters
     ------------
         trange: list or str  
             time range of interest [starttime, endtime] with the format 
-            ['YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
+            'YYYY-MM-DD','YYYY-MM-DD'] or to specify more or less than a day 
             ['YYYY-MM-DD/hh:mm:ss','YYYY-MM-DD/hh:mm:ss']
-            (default: ["2021-8-10","2021-8-11"])
+            (default: ["2021-10-1","2021-10-2"])
         
         level: str
-            Data level (default: l2pre) --> after MOI default will be l2
+            Data level (default: l2pre)
         
+        data_mode: str
+            Data rate mode, 'l' for the low data rate mode (L-mode; default), 'm' for M-mode
+        
+        datatype: str
+            Data type, 'cnt' for count data (default)
+        
+        obs_mode: str
+            Observation mode (Currently not used; may be used in future updates)
+
         prefix: str
             The tplot variable names will be given this prefix.
-            If not specified, a default prefix "mmo_spm_<level>_"
-            (e.g. "mmo_spm_l2pre_") is added automatically.
-            Pass your own string to override it.
-            (default: "" -> "mmo_spm_l2pre_")
+            By default, no prefix is added.
 
         suffix: str
             The tplot variable names will be given this suffix.
@@ -59,7 +69,7 @@ def spm(
             List of variable names to load
             If not specified, all data variables are loaded.
             (default: [])
-        
+
         downloadonly: bool
             Set this flag to download the CDF files, but not load them into 
             tplot variables.
@@ -84,62 +94,48 @@ def spm(
         uname: str
         passwd: str
             Password for accessing restricted data products.
-            Please contact the PI teams (or the project team) to obtain authentication credentials.
+            Please contact the instrument team (or the project team) to obtain authentication credentials.
             Access to l2pre data is restricted and generally limited to project members.
+        
+        files: list of str
+            Set data file paths explicitly to load data from local files.
+            (default: None)
 
     Returns
     ----------
         List of tplot variables created.
 
-    Sample data of the SPM is located at the CHS repository
-    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
+    Sample data of the HEP electron is located at the CHS repository
+    https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/mppe/hep/hepe/l2pre/cnt/2021/10/bc_mmo_mppe-hep_l2p_l-ele-cnt_20211001_r01-v00-00.cdf
     """
 
-    # --- Normalize the requested level FIRST, before deciding prefix/suffix or
-    #     building the path, so that `level` becomes a single clean canonical
-    #     value we can rely on everywhere below (path, prefix, load() call).
-    #
-    # normalization / use lower capitals --> remove space --> "level" to "l"
-    # e.g. "level 2 pre", "L2PRE", "l2 p" --> "l2pre"
-    level_key = level.lower().replace(" ", "").replace("level", "l")
-
-
-    if level_key in ("l2pre", "l2p"):
-        level = "l2pre"
-        
-        pathformat = (
-            "satellite/mmo/cdf/spm/" + level
-            + "/cnt/%Y/%m/"
-            + "bc_mmo_spm_" + level[:3]
-            + "_cnt_%Y%m%d_r??-v??-??.cdf"
-            )
-        # https://chs.isee.nagoya-u.ac.jp/data/chs/satellite/mmo/cdf/spm/l2pre/cnt/2021/08/bc_mmo_spm_l2p_cnt_20210810_r01-v00-00.cdf
-        # for spm: level=l2pre, datatype=
-        # The directory uses `level` (=l2pre) directly, while the file name uses the
-        # short token "l2p", derived here from `level` so we keep only one variable.
-
-    elif level_key in ("l2", "l3"):
-        level = level_key
-        pathformat = (
-            "satellite/mmo/cdf/spm/" + level
-            + "/cnt/%Y/%m/"
-            + "bc_mmo_spm_" + level[:3]
-            + "_cnt_%Y%m%d_r??-v??-??.cdf"
-            )
+    if suffix is None:
+        suffix = ""
     
+    if level == "l2pre":
+        lev = "l2p"
+    elif level == "l2":
+        lev = "l2"
     else:
-        raise ValueError(f"Unsupported level: {level!r}")
-
-    # Add a default prefix ONLY when the user did not specify one, so that tplot
-    # variable names identify the mission/instrument/level. A user-supplied
-    # prefix is respected and never overwritten.
+        lev = level
+    
     if prefix == "":
-        prefix = "mmo_spm_" + level + "_"
-
-    spm_vars = load(trange=trange,
-                    instrument='spm', 
+        prefix = "mmo_hep_"+lev+"_"+data_mode+"-ele-"+datatype+"_"
+    
+    
+    if files is None:
+        pathformat = (
+            "satellite/mmo/cdf/mppe/hep/hepe/" + level +"/"
+            + datatype + "/%Y/%m/"
+            + "bc_mmo_mppe-hep_" + lev + "_" + data_mode + "-ele-" + datatype + "_%Y%m%d_r??-v??-??.cdf"
+        )
+    
+    tvars = load(trange=trange,
+                    instrument='hep', 
                     pathformat=pathformat,
                     level=level,
+                    data_mode=data_mode,
+                    datatype=datatype,
                     prefix=prefix, 
                     suffix=suffix,
                     get_support_data=get_support_data, 
@@ -150,10 +146,32 @@ def spm(
                     no_update=no_update,
                     time_clip=time_clip,
                     force_download=force_download,
-                    uname=uname, passwd=passwd
+                    uname=uname, passwd=passwd,
+                    files=files
                     )
+    if downloadonly is True:    
+        return None
     
-    return spm_vars
+    # Decorate tplot variables
+    if level == "l2pre":
+        if data_mode == "l":
+            match datatype:
+                case "cnt":
+                    vn = prefix+"3dcounts"
+                    options( vn, "spec", 0)
+                    options( vn, "yrange", [0, 0])
+                    options( vn, "ylog", 1)
+                    options( vn, "ysubtitle", "[keV]")
+                    options( vn, "ztitle", "[cnt/smpl]")
+                    options( vn, "ytitle", "BC/MMO\nHEP L2p\ne- cnt")
+
+        elif data_mode == "m":
+            # Currently, only L-mode data is available
+            print("M-mode data is currently not available.")
+    
+
+
+    return tvars
 
 
 

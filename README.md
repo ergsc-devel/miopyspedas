@@ -3,7 +3,8 @@
 The routines in this module can be used to load data from the BepiColombo/Mercury Magnetospheric Orbiter (MMO).
 
 ## Instruments 
-* Solar Particle Monitor (SPM) 
+* Solar Particle Monitor (SPM)
+* Fluxgate Magnetometer onboard Mio (MGF)
 * Coming soon...
 
 ## Instllation
@@ -58,7 +59,7 @@ An example code for Jupyter notebooks
 
 ```python
 import miopyspedas
-from pytplot import tplot, store_data, options, get_data
+from pyspedas import tplot, store_data, options, get_data
 import pyspedas
 ```
 

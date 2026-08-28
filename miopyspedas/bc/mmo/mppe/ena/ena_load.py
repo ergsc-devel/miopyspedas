@@ -4,9 +4,9 @@ import cdflib
 from pyspedas.utilities.dailynames import dailynames
 from pyspedas.utilities.download import download
 from pyspedas import time_clip as tclip
-from pyspedas import cdf_to_tplot
-
-from .config import CONFIG
+##### from pyspedas import cdf_to_tplot
+from miopyspedas.bc.mmo.mppe.ena.ena_cdf_to_tplot import cdf_to_tplot
+from ...config import CONFIG
 
 
 def load(trange=["2021-8-10","2021-8-11"], 
