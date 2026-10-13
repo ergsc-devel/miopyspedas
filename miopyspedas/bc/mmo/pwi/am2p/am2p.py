@@ -177,30 +177,35 @@ def am2p(
         return am2p_vars
 
     # set spectrogram plot option
-    options(prefix+'*power_*'+suffix,  'Spec', 1)
-    options(prefix+'*phase_*'+suffix,  'Spec', 1)
+    options(prefix+'*power*'+suffix,  'Spec', 1)
+    options(prefix+'*phase*'+suffix,  'Spec', 1)
 
-    # set ysubtitle
-    options(tnames(prefix+'*power_*'+suffix),  'ysubtitle', 'frequency [kHz]')
-    options(tnames(prefix+'*phase_*'+suffix),  'ysubtitle', 'frequency [kHz]')
+    # # set title
+    options(tnames(prefix+'power'+suffix),  'title', 'Impedance Spectrum')
+    options(tnames(prefix+'phase'+suffix),  'title', 'Phase')
+
+    # set ytitle
+    options(tnames(prefix+'*power*'+suffix),  'ytitle', 'frequency [kHz]')
+    options(tnames(prefix+'*phase*'+suffix),  'ytitle', 'frequency [kHz]')
     
     # set yrange
-    options(tnames(prefix+'*power_*'+suffix),  'y_range', [0.128, 143.3598633])
-    options(tnames(prefix+'*phase_*'+suffix),  'y_range', [0.128, 143.3598633])
+    options(tnames(prefix+'*power*'+suffix),  'y_range', [0.128, 143.3598633])
+    options(tnames(prefix+'*phase*'+suffix),  'y_range', [0.128, 143.3598633])
     
     # set y axis to logscale
-    options(tnames(prefix+'*power_*'+suffix),  'ylog', 1)
-    options(tnames(prefix+'*phase_*'+suffix),  'ylog', 1)
+    options(tnames(prefix+'*power*'+suffix),  'ylog', 1)
+    options(tnames(prefix+'*phase*'+suffix),  'ylog', 1)
     
     # set ztitle
-    options(tnames(prefix+'*power_*'+suffix),  'ztitle', 'dB')
-    options(tnames(prefix+'*phase_*'+suffix),  'ztitle', 'rad')
+    options(tnames(prefix+'*power*'+suffix),  'ztitle', 'dB')
+    options(tnames(prefix+'*phase*'+suffix),  'ztitle', 'rad')
 
     # set zrange
-    options(tnames(prefix+'*power_*'+suffix),  'z_range', [0, 82])
-    options(tnames(prefix+'*phase_*'+suffix),  'z_range', [0, 6.28])
+    options(tnames(prefix+'*power*'+suffix),  'z_range', [0, 82])
+    options(tnames(prefix+'*phase*'+suffix),  'z_range', [0, 6.28])
 
-    # set z axis to logscale
-    options(tnames(prefix+'*power_*'+suffix),  'zlog', 1)
+    # set z axis to linearscale
+    options(tnames(prefix+'*power*'+suffix),  'zlog', 0)
+    options(tnames(prefix+'*phase*'+suffix),  'zlog', 0)
 
     return am2p_vars

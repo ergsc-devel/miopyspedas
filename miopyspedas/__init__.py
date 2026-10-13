@@ -17,5 +17,9 @@ from .bc.mmo.mppe.msa.msa import msa
 from .bc.mmo.mppe.ena.ena import ena
 from .bc.mmo.mppe.hep.hepe import hepe 
 from .bc.mmo.mppe.mea.mea import mea 
-from .bc.mmo.pwi.ofa import ofa
-from .bc.mmo.pwi.sorbet import sorbet
+
+from .bc.mmo.pwi.ofa.ofa import ofa
+from .bc.mmo.pwi.sorbet.sorbet import sorbet
+from .bc.mmo.pwi.am2p.am2p import am2p
+
+from .bc.mmo.utilities import *

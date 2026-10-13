@@ -18,3 +18,6 @@ from .pwi.ofa import ofa
 from .pwi.sorbet import sorbet
 from .pwi.efd import efd
 from .pwi.am2p import am2p
+
+# Utilities
+from .utilities import *
