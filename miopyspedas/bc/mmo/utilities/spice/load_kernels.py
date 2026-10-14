@@ -11,7 +11,8 @@ def load_kernels(
     only_for_orb=False,
     pred=False, 
     clear=False, 
-    download_only=False
+    download_only=False,
+    local_dir=None
 ):
     """
     Download and furnish SPICE kernels for BepiColombo/Mio.
@@ -30,6 +31,8 @@ def load_kernels(
         If True, clear the SPICE pool before loading kernels.
     download_only : bool, default=False
         If True, return only the list of downloaded files without loading them into SPICE.
+    local_dir : str, default=None
+        Place for the downloaded kernels. If local_dir==None, we set local_dir as './chs_data/misc/spice/naif/BEPICOLOMBO/kernels/*'. 
 
     Returns
     -------
@@ -44,16 +47,35 @@ def load_kernels(
             'lsk/naif0012.tls',
             'pck/pck00011_bc_v00.tpc', 
             'pck/de-403-masses.tpc',
+            'spk/bc_mmo_struct_v01.bsp',
+            'spk/bc_mmo_cruise_v02.bsp',
+            'spk/bc_mpo_cog_v03.bsp',
+            'spk/bc_mpo_cog_fcp_00237_20181020_20261024_v02.bsp',
+            'spk/bc_mpo_struct_v13.bsp',
+            'spk/bc_mpo_prelaunch_v01.bsp',
+            'spk/bc_mpo_mcp_50041_20181019_20251219_v02.bsp',
+            'spk/bc_mpo_mlt_50037_20270301_20290516_v01.bsp',
+            'spk/bc_mpo_slt_extension_20290516_20310516_v01.bsp',
             'spk/bc_mpo_fcp_00237_20181020_20270411_v02.bsp',
-            'spk/bc_mpo_cog_00230_20181118_20260615_v01.bsp',
-            'bc_mmo_cruise_v02.bsp',
+            'spk/bc_mpo_flp_00233_20270309_20300101_v02.bsp',
             'spk/de432s.bsp',
             'spk/bc_sci_v02.bsp', 
             'fk/bc_mpo_v40.tf',
             'fk/bc_mmo_v14.tf',
             'fk/bc_sci_v12.tf',
-            'fk/bc_ops_v02.tf',
             'ck/bc_mmo_sc_cruise_v02.bc',
+            'ck/bc_mpo_sc_sct_50041_20181019_20251219_f20181127_v03.bc',
+            'ck/bc_mpo_sc_sct_50041_20230511_20261207_f20181127_v01.bc',
+            'ck/bc_mpo_sc_prelaunch_f20181121_v01.bc',
+            'ck/bc_mpo_sc_slt_20261117_20270307_f20181127_v02.bc',
+            'ck/bc_mpo_sc_slt_00233_20270309_20291231_f20181127_v01.bc',
+            'ck/bc_mpo_sc_fcp_00237_20181020_20261025_f20181127_v02.bc',
+            'ck/bc_mpo_sc_slp_00211_20270314_20280507_f20181127_v01.bc',
+            'sclk/bc_mpo_step_20261011.tsc',
+            'sclk/bc_mpo_fict_20181127.tsc',
+            'sclk/bc_mmo_step_20240103.tsc',
+            'sclk/bc_mmo_fict_20231129.tsc'
+
         ]
     else:  # Download all kernels using a meta kernel
         mk_fn = "mk/bc_ops.tm"
@@ -78,12 +100,15 @@ def load_kernels(
         if no_ck:
             kernel_list = [k for k in kernel_list if not re.search(r"^ck/", k)]
 
+    # Set local_dir as './chs_data/misc/spice/naif/BEPICOLOMBO/kernels/*', if local_dir==None
+    if local_dir == None:
+            local_dir = CONFIG["local_data_dir"].replace("/chs", "") + "/misc/spice/naif/BEPICOLOMBO/kernels/"
     
-    # Download kernels from ESA server to the local data directory 
+    # Download kernels from ESA server to the local data directory    
     files = download(
         remote_file=kernel_list,
         remote_path=esa_spice_url,
-        local_path=CONFIG["local_data_dir"].replace("/chs", "") + "/misc/spice/naif/BEPICOLOMBO/kernels/",
+        local_path=local_dir,
         no_download=no_update
     )
 

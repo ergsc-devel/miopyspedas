@@ -23,7 +23,7 @@ def _set_vrange(fig, limits):
     set_axis_range(fig.xy_axis, limits, "y")
     fig.canvas.draw_idle()
 
-def tplotxy(tvars,
+def tplotxy_mercury(tvars,
             plane='xy',
             center_origin=True,
             reverse_x = False,
@@ -193,6 +193,8 @@ def tplotxy(tvars,
     if plot_units is None:
         plot_units = 'None'
         unit_annotation=""
+    if plot_units=='rm':
+            unit_annotation=r" ($R_{\rm{M}}$)"
     else:
         unit_annotation=f' ({plot_units})'
 
@@ -334,13 +336,13 @@ def tplotxy(tvars,
 
         theta1, theta2 = -90, 90
         if plane=='xy' or plane=='xz':
-            w1 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black')
-            w2 = Wedge((0, 0), cb_radius, theta2, theta1, fc='black', edgecolor='black')
+            w1 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black', alpha = 0.5)
+            w2 = Wedge((0, 0), cb_radius, theta2, theta1, fc='black', edgecolor='black', alpha = 0.5)
             axis.add_artist(w1)
             axis.add_artist(w2)
         else:
             theta1,theta2 = 0,360
-            w1 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black')
+            w1 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black', alpha = 0.5)
             axis.add_artist(w1)
 
     axis.set_aspect('equal')

@@ -36,7 +36,7 @@ def _set_zrange(fig, limits):
     fig.canvas.draw_idle()
 
 
-def tplotxy3(tvars,
+def tplotxy3_mercury(tvars,
             center_origin=True,
             reverse_x = False,
             plot_units='rm',
@@ -215,6 +215,8 @@ def tplotxy3(tvars,
     if plot_units is None:
         plot_units = 'None'
         unit_annotation=""
+    if plot_units=='rm':
+        unit_annotation=r" ($R_{\rm{M}}$)"
     else:
         unit_annotation=f' ({plot_units}) '
 
@@ -380,10 +382,10 @@ def tplotxy3(tvars,
         theta1, theta2 = -90, 90
 
         # Artists can't be shared between axes, so we need two copies of each wedge (XY and XZ)
-        w1 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black')
-        w2 = Wedge((0, 0), cb_radius, theta2, theta1, fc='black', edgecolor='black')
-        w3 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black')
-        w4 = Wedge((0, 0), cb_radius, theta2, theta1, fc='black', edgecolor='black')
+        w1 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black', alpha = 0.5)
+        w2 = Wedge((0, 0), cb_radius, theta2, theta1, fc='black', edgecolor='black', alpha = 0.5)
+        w3 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black', alpha = 0.5)
+        w4 = Wedge((0, 0), cb_radius, theta2, theta1, fc='black', edgecolor='black', alpha = 0.5)
 
         # XY
         xy_plane.add_artist(w1)
@@ -395,7 +397,7 @@ def tplotxy3(tvars,
 
         # YZ  (this is just a circle)
         theta1,theta2 = 0,360
-        w5 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black')
+        w5 = Wedge((0, 0), cb_radius, theta1, theta2, fc='white', edgecolor='black', alpha = 0.5)
         yz_plane.add_artist(w5)
 
     xy_plane.set_aspect('equal')

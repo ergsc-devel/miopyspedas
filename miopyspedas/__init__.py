@@ -1,25 +1,16 @@
 #/miopyspedas/miopyspedas/__init__.py
 """
-This module contains routines for loading BepiColombo data
+Routines for loading and plotting BepiColombo/Mio (MMO) data with pySPEDAS.
 
-from .bc.mmo.instrument.instrument import instrument
-from .bc.mpo.instrument.instrument import instrument 
+    import miopyspedas
+    miopyspedas.mgf(trange=[...])       
+    miopyspedas.mmo.mgf(trange=[...])
 """
 
 from functools import wraps
 
-from .bc.mmo.load import load
-from .bc.mmo.spm.spm import spm
-from .bc.mmo.mgf.mgf import mgf
+from .bc import mmo                     # miopyspedas.mmo.*
+from .bc.mmo import *                   # miopyspedas.*
+from .bc.mmo import __all__ as _mmo_all
 
-from .bc.mmo.mppe.mia.mia import mia
-from .bc.mmo.mppe.msa.msa import msa
-from .bc.mmo.mppe.ena.ena import ena
-from .bc.mmo.mppe.hep.hepe import hepe 
-from .bc.mmo.mppe.mea.mea import mea 
-
-from .bc.mmo.pwi.ofa.ofa import ofa
-from .bc.mmo.pwi.sorbet.sorbet import sorbet
-from .bc.mmo.pwi.am2p.am2p import am2p
-
-from .bc.mmo.utilities import *
+__all__ = ["mmo"] + list(_mmo_all)
