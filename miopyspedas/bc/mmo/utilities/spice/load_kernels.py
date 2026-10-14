@@ -45,11 +45,15 @@ def load_kernels(
             'pck/pck00011_bc_v00.tpc', 
             'pck/de-403-masses.tpc',
             'spk/bc_mpo_fcp_00237_20181020_20270411_v02.bsp',
+            'spk/bc_mpo_cog_00230_20181118_20260615_v01.bsp',
+            'bc_mmo_cruise_v02.bsp',
             'spk/de432s.bsp',
             'spk/bc_sci_v02.bsp', 
             'fk/bc_mpo_v40.tf',
+            'fk/bc_mmo_v14.tf',
             'fk/bc_sci_v12.tf',
-            'fk/bc_ops_v02.tf'
+            'fk/bc_ops_v02.tf',
+            'ck/bc_mmo_sc_cruise_v02.bc',
         ]
     else:  # Download all kernels using a meta kernel
         mk_fn = "mk/bc_ops.tm"

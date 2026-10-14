@@ -10,7 +10,7 @@ import spiceypy as spice
 
 from ..spice import load_kernels
 
-rm_in_km = 2439.9 #mean mercury radius [km]
+rm_in_km = 2439.4 # mean mercury radii [km] based on "pck00011_bc_v00.tpc": Use spice.bodvcd(199, "RADII", 3)
 
 def orb(trange=['2023-06-19', '2023-06-20'],
         datatype='def',
@@ -78,8 +78,15 @@ def orb(trange=['2023-06-19', '2023-06-20'],
     pyspedas.set_units(prefix+'R'+suffix, units)
     pyspedas.set_units(prefix+'vel'+suffix, 'km/s')
 
+    options(prefix+'pos'+suffix, 'legend_names', ['X', 'Y', 'Z'])
+    options(prefix+'vel'+suffix, 'legend_names', ['Vx[km/s]', 'Vy[km/s]', 'Vz[km/s]'])
+    if units == 'km':
+        options(prefix+'R'+suffix, 'legend_names', ['Distance from '+ observer+f'[{units}]'])
+    elif units =='rm':
+        options(prefix+'R'+suffix, 'legend_names', ['Distance from '+ observer+r'[R$_{\rm{M}}$]'])
+
     stored_variables.append(prefix+'pos'+suffix)
     stored_variables.append(prefix+'vel'+suffix)
-    stored_variables.append(prefix+'R'+suffix)    
+    stored_variables.append(prefix+'R'+suffix)
 
     return stored_variables
