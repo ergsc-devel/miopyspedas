@@ -39,6 +39,9 @@ def load_kernels(
     list of str
         List of local file paths of kernels successfully loaded into SPICE.
     """
+    # Set local_dir as './chs_data/misc/spice/naif/BEPICOLOMBO/kernels/*', if local_dir==None
+    if local_dir == None:
+            local_dir = CONFIG["local_data_dir"].replace("/chs", "") + "/misc/spice/naif/BEPICOLOMBO/kernels/"
 
     #  Define the paths to the required SPICE kernels
     esa_spice_url = "http://spiftp.esac.esa.int/data/SPICE/BEPICOLOMBO/kernels/"
@@ -100,10 +103,7 @@ def load_kernels(
         if no_ck:
             kernel_list = [k for k in kernel_list if not re.search(r"^ck/", k)]
 
-    # Set local_dir as './chs_data/misc/spice/naif/BEPICOLOMBO/kernels/*', if local_dir==None
-    if local_dir == None:
-            local_dir = CONFIG["local_data_dir"].replace("/chs", "") + "/misc/spice/naif/BEPICOLOMBO/kernels/"
-    
+
     # Download kernels from ESA server to the local data directory    
     files = download(
         remote_file=kernel_list,
