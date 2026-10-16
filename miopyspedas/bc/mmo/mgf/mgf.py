@@ -158,12 +158,12 @@ def mgf(
     # Set a format of file path
     match level:
         case "l2pre":
-            # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l_scf_20250107_r01-v00-00.cdf"
+            # "satellite/mmo/cdf/mgf/l2pre/l/2025/01/bc_mmo_mgf_l2p_l-scf_20250107_r01-v00-00.cdf"
             pathformat = (
                     "satellite/mmo/cdf/mgf/" + level
                     + "/" + data_mode + "/%Y/%m/"
                     + "bc_mmo_mgf_" + level[:3] + '_' + data_mode
-                    + "_" + coord + "_%Y%m%d_r??-v??-??.cdf"
+                    + "-" + coord + "_%Y%m%d_r??-v??-??.cdf"
                     )
 #####        case "l2":
 
