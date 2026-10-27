@@ -13,6 +13,7 @@ def ofa(
         data_mode: str = 'l',
         datatype: str = 'spec',
         obs_mode: str ='ms',
+        field_mode: str = 'b',
         prefix: str = '',
         suffix: str = '',
         local_dir:Optional[str] = None,
@@ -117,13 +118,15 @@ def ofa(
 
     file_res = 3600. * 24
     prefix = 'mmo_pwi_ofa_'+level+'_'+data_mode+'_'+obs_mode+'_'
-
+    if level == 'l2p': 
+        leveldir = 'l2pre'
+    
     if local_dir: 
         pathformat = local_dir+\
-            '/%Y/%m/bc_mmo_pwi-ofa_'+level+'_'+data_mode+'-'+datatype+'-'+obs_mode+'_%Y%m%d_r??-v??-??.cdf'
+            '/%Y/%m/bc_mmo_pwi-ofa_'+level+'_'+data_mode+'-'+datatype+'-'+field_mode+'-'+obs_mode+'_%Y%m%d_r??-v??-??.cdf'
     else:
-        pathformat = 'satellite/mmo/cdf/pwi/ofa/'+level+'/'+datatype+'/'+data_mode + \
-            '/%Y/%m/bc_mmo_pwi-ofa_'+level+'_'+data_mode+'-'+datatype+'-'+obs_mode+'_%Y%m%d_r??-v??-??.cdf'
+        pathformat = 'satellite/mmo/cdf/pwi/ofa/'+leveldir+'/'+datatype+'/'+data_mode + \
+            '/%Y/%m/bc_mmo_pwi-ofa_'+level+'_'+data_mode+'-'+datatype+'-'+field_mode+'-'+obs_mode+'_%Y%m%d_r??-v??-??.cdf'
 
     loaded_data = load(trange=trange,
                     instrument='ofa', 
@@ -158,43 +161,43 @@ def ofa(
     #  Merge spectrogram
     match data_mode:
         case 'l':
-            store_data(prefix+'e_spectra_merged', data=tnames(prefix+'spec_e_*'))
-            store_data(prefix+'b_spectra_merged', data=tnames(prefix+'spec_b_*'))  
-            options(prefix+'e_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (E)')
-            options(prefix+'b_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (B)')
+            store_data(prefix+field_mode+'_spectra_merged', data=tnames(prefix+'spec_'+field_mode+'*'))
+            options(prefix+field_mode+'_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC ('+field_mode.upper()+')')
+            
         case 'm':
-            store_data(prefix+'ex_spectra_merged', data=tnames(prefix+'spec_ex_*'))
-            store_data(prefix+'ey_spectra_merged', data=tnames(prefix+'spec_ey_*'))
-
-            store_data(prefix+'by_spectra_merged', data=tnames(prefix+'spec_by_*'))
-            store_data(prefix+'bz_spectra_merged', data=tnames(prefix+'spec_bz_*'))
-
-            options(prefix+'ex_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ex)')
-            options(prefix+'ey_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ey)')
-
-            options(prefix+'by_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (By)')
-            options(prefix+'bz_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Bz)')
-
+            match field_mode:
+                case 'e':
+                    store_data(prefix+'eu_spectra_merged', data=tnames(prefix+'spec_eu*'))
+                    store_data(prefix+'ev_spectra_merged', data=tnames(prefix+'spec_ev*'))
+                    options(prefix+'eu_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Eu)')
+                    options(prefix+'ev_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (Ev)')
+                
+                case 'b':
+                    b_comp = ['alpha','beta','gamma']
+                    for cs in range(3):
+                        if tnames(prefix+['spec_b'+b_comp[cs]+'_*']) != '':
+                            store_data(prefix+'b'+b_comp[cs]+'_spectra_merged', data=tnames(prefix+'spec_b'+b_comp[cs]+'*'))
+                            options(prefix+'b'+b_comp[cs]+'_spectra_merged', 'ytitle', 'MIO PWI/OFA-SPEC (B'+b_comp[cs]+')')
 
     # set ysubtitle
-    options(tnames(prefix+'*_spectra_*'+suffix),  'ysubtitle', 'frequency [kHz]')
+    options(prefix+'*_spectra_*'+suffix,  'ysubtitle', 'frequency [kHz]')
     
     # set yrange
-    options(tnames(prefix+'*_spectra_*'+suffix),  'yrange', [1e1,1e5])
+    options(prefix+'*_spectra_*'+suffix,  'yrange', [1e1,1e5])
     
     # set y axis to logscale
-    options(tnames(prefix+'*_spectra_*'+suffix),  'ylog', 1)
+    options(prefix+'*_spectra_*'+suffix,  'ylog', 1)
     
     # set ztitle
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'ztitle', 'dBmVpp')
-    options(tnames(prefix+'b*_spectra_*'+suffix),  'ztitle', 'pT^2/Hz')
+    options(prefix+'e*_spectra_*'+suffix,  'ztitle', 'dBmVpp')
+    options(prefix+'b*_spectra_*'+suffix,  'ztitle', 'pT^2/Hz')
 
     # set z axis to logscale
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'zlog', 1)
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'zlog', 1)
+    options(prefix+'e*_spectra_*'+suffix,  'zlog', 1)
+    options(prefix+'e*_spectra_*'+suffix,  'zlog', 1)
 
     # change colormap option
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'Colormap', 'jet')
-    options(tnames(prefix+'e*_spectra_*'+suffix),  'Colormap', 'jet')
+    options(prefix+'e*_spectra_*'+suffix,  'Colormap', 'jet')
+    options(prefix+'e*_spectra_*'+suffix,  'Colormap', 'jet')
 
     return loaded_data
