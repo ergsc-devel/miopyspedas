@@ -192,12 +192,15 @@ def ofa(
     options(prefix+'e*_spectra_*'+suffix,  'ztitle', 'dBmVpp')
     options(prefix+'b*_spectra_*'+suffix,  'ztitle', 'pT^2/Hz')
 
+    # set zrange
+    options(prefix+'b*_spectra_*'+suffix,  'zrange', [1e-8,1e-4])
+
     # set z axis to logscale
     options(prefix+'e*_spectra_*'+suffix,  'zlog', 1)
-    options(prefix+'e*_spectra_*'+suffix,  'zlog', 1)
+    options(prefix+'b*_spectra_*'+suffix,  'zlog', 1)
 
     # change colormap option
     options(prefix+'e*_spectra_*'+suffix,  'Colormap', 'jet')
-    options(prefix+'e*_spectra_*'+suffix,  'Colormap', 'jet')
+    options(prefix+'b*_spectra_*'+suffix,  'Colormap', 'jet')
 
     return loaded_data
